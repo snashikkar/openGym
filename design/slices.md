@@ -4,25 +4,23 @@ Executable build order structured into end-to-end vertical slices. Each slice in
 
 ---
 
-## Slice 1: `1-bun-toolchain-and-lossless-migration`
+## Slice 1: `1-bun-toolchain-and-lossless-migration` [SHIPPED]
 
 ```
 slice:        1-bun-toolchain-and-lossless-migration
-karma:        Bun toolchain initialization + Dexie database setup + atomic legacy migration
-karaṇa:       Bun v1.4.2 CLI, Dexie.js v4, fake-indexeddb, happy-dom
-adhikaraṇa:   package.json, bunfig.toml, frontend/src/db/, frontend/src/store/migration.js
-sampradāna:   Slice 2 inherits verified Bun test runner and initialized Dexie database stores
-slice-branch: slice/1-bun-toolchain-and-lossless-migration
+status:       shipped & swept
+branch:       slice/1-bun-toolchain-and-lossless-migration
+commit:       49439c6
+review:       ANUBIS PASS
 traceability:
   journeys: [jrn-lossless-storage-migration, jrn-bun-unified-development-pipeline]
   screens:  [scr-migration-gate, scr-developer-test-dashboard]
+done-when:
+  1. bun install & test <200ms — proven by test/bun-toolchain.test.js
+  2. atomic lossless migration & Capacitor mirror — proven by test/migration-lossless.test.js
+  3. corrupt JSON fallback & recovery — proven by test/migration-corrupt-fallback.test.js
+  4. blocked IDB in-memory fallback — proven by test/migration-blocked-idb.test.js
 ```
-
-### Done-When Acceptance Criteria
-1. `bun install` resolves dependencies into `bun.lock`, and `bun test` executes the test suite in $<200\text{ ms}$ with `fake-indexeddb` and `happy-dom` preloaded — proven by `test/bun-toolchain.test.js`.
-2. App boot detects schema version 0 and losslessly migrates all workouts, routines, weigh-ins, and settings from `localStorage.gym_state_v1` into Dexie IndexedDB in an atomic transaction, writes migration receipt, and mirrors backup to Capacitor storage via `nativeSave` (DEC-07) — proven by `test/migration-lossless.test.js`.
-3. Malformed or corrupted `gym_state_v1` JSON payloads are safely copied to `gym_state_v1_corrupt_backup` without data loss, recovering valid records and alerting user — proven by `test/migration-corrupt-fallback.test.js`.
-4. Blocked IndexedDB environment (strict private mode or quota exhaustion) falls back gracefully to in-memory mode and offers direct JSON backup export — proven by `test/migration-blocked-idb.test.js`.
 
 ---
 

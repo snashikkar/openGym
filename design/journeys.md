@@ -5,36 +5,8 @@ Sequenced user journeys for the Dexie.js (IndexedDB) persistence migration, bite
 ---
 
 ## Journey 1: `lossless-storage-migration`
-
-```
-journey:      lossless-storage-migration
-kartā:        returning-user (launching updated app on web or mobile shell)
-karma:        legacy localStorage `gym_state_v1` → normalized Dexie IndexedDB stores
-karaṇa:       Dexie schema versioning + migration runner transaction
-adhikaraṇa:   client-boot-lifecycle, browser storage sandbox
-```
-
-### Scenarios (BDD Acceptance Criteria)
-
-#### happy-path
-- **Given** a returning user with existing workouts, routines, and settings in `localStorage` (`gym_state_v1`)
-- **When** the updated application boots and detects IndexedDB schema version 0
-- **Then** all workouts, routines, weigh-ins, and settings are extracted, transformed, and written into normalized Dexie object stores within a single atomic transaction, a migration receipt is logged, `localStorage` is marked as migrated, Capacitor mobile builds mirror the snapshot to device storage via `nativeSave` (DEC-07), and the home screen renders with full historical data.
-
-#### alternate-paths
-- **Given** a new user launching openGym for the very first time with no `localStorage` data
-- **When** the application boots and initializes the Dexie database
-- **Then** default settings, starter routines, and empty object stores are created immediately with zero migration prompts or delays.
-
-#### edge-cases
-- **Given** a user with a corrupted or partially truncated `gym_state_v1` JSON payload in `localStorage`
-- **When** the migration runner attempts JSON deserialization
-- **Then** the raw string is copied to `gym_state_v1_corrupt_backup`, the valid portions are recovered into IndexedDB, an error boundary toast notifies the user, and no existing data is deleted.
-
-#### failure-paths
-- **Given** a browser environment where IndexedDB is blocked, disabled by strict privacy settings, or has exceeded storage quota
-- **When** Dexie attempts to open or write to the database
-- **Then** the application falls back gracefully to in-memory/localStorage emergency read-only mode, displays an explicit storage diagnostic modal, and provides a direct JSON export button so no training history is trapped.
+→ Shipped in Slice 1 (`slice/1-bun-toolchain-and-lossless-migration` @ 49439c6)
+→ Proven by `test/migration-lossless.test.js`, `test/migration-corrupt-fallback.test.js`, `test/migration-blocked-idb.test.js`
 
 ---
 
@@ -73,36 +45,8 @@ adhikaraṇa:   active-workout-screen, history-detail-screen
 ---
 
 ## Journey 3: `bun-unified-development-pipeline`
-
-```
-journey:      bun-unified-development-pipeline
-kartā:        developer / CI automation agent
-karma:        dependencies, test suites, API server runtime, client production build
-karaṇa:       Bun CLI (`bun install`, `bun test`, `bun run dev`, `bun run build`)
-adhikaraṇa:   developer workstation, CI runner environment
-```
-
-### Scenarios (BDD Acceptance Criteria)
-
-#### happy-path
-- **Given** a clean checkout of the openGym repository
-- **When** the developer executes `bun install` followed by `bun test`
-- **Then** dependencies resolve and lock into `bun.lock`, and the entire unit/integration test suite executes under `bun:test` in under 200 ms with all tests passing.
-
-#### alternate-paths
-- **Given** a developer making modifications to the progression engine in `frontend/src/lib/progression.js`
-- **When** the developer runs `bun test frontend/src/lib/progression.test.js --watch`
-- **Then** the specific test suite executes on file save in under 50 ms, providing instantaneous test-driven feedback.
-
-#### edge-cases
-- **Given** frontend tests that assert browser-specific globals (`window`, `localStorage`, `navigator.userAgent`, `indexedDB`)
-- **When** `bun test` runs against frontend modules
-- **Then** a global test preload environment imports `happy-dom` and `fake-indexeddb` shims (DEC-06), enabling full DOM and IndexedDB emulation inside the Bun runtime.
-
-#### failure-paths
-- **Given** an incompatible package dependency or syntax error in a test file
-- **When** `bun test` or `bun run build` runs
-- **Then** the command exits with non-zero exit code, outputs file-and-line error attribution without silent failures, and prevents invalid artifacts from building.
+→ Shipped in Slice 1 (`slice/1-bun-toolchain-and-lossless-migration` @ 49439c6)
+→ Proven by `test/bun-toolchain.test.js`
 
 ---
 

@@ -1,5 +1,7 @@
-- [slice-1] tests green (10/10 passing in 177ms) · ready for slice-review · slice-branch: slice/1-bun-toolchain-and-lossless-migration
-- [prayoga] plan gated (slice 1 picked) · next: complete slice 1 review and release
+- [slice-2] ready to cut branch · base: trunk tip (slice-1 swept) · next: cut slice/2-bitemporal-workout-logging-and-audit
+- [open] wire migrateLocalStorage into app boot (ANUBIS Finding A1 on Slice 1)
+- [slice-1] shipped & swept · branch: slice/1-bun-toolchain-and-lossless-migration @ 49439c6 · decisions: DEC-05..DEC-08
+- [prayoga] slice 1 shipped (1/3) · next: slice 2
 - [dhātu] complete (anubis validated: PASS)
 - [rūpa] complete
 - [bīja] complete (anubis validated: CONDITIONAL PASS -> resolved)
