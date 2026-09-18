@@ -1,5 +1,16 @@
 {
+  "name": "opengym",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "dexie": "^4.0.11"
+  },
   "devDependencies": {
+    "fake-indexeddb": "^6.0.0",
+    "happy-dom": "^20.11.2",
     "js-yaml": "^4.1.0"
   }
 }

@@ -1,4 +1,5 @@
-- [prayoga] slice plan drafted · next: user picks slice 1 explicitly
+- [slice-1] tests green (10/10 passing in 177ms) · ready for slice-review · slice-branch: slice/1-bun-toolchain-and-lossless-migration
+- [prayoga] plan gated (slice 1 picked) · next: complete slice 1 review and release
 - [dhātu] complete (anubis validated: PASS)
 - [rūpa] complete
 - [bīja] complete (anubis validated: CONDITIONAL PASS -> resolved)
