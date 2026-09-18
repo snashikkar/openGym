@@ -31,7 +31,8 @@ export function setupAuditHooks(db) {
     if (!table) continue;
 
     table.hook('creating', function (primKey, obj, trans) {
-      if (trans && trans.tables && trans.tables.auditLog && !trans._skipAudit) {
+      const hasAudit = trans && (trans.tables?.auditLog || trans.storeNames?.includes('auditLog'));
+      if (hasAudit && !trans._skipAudit) {
         const entityId = primKey || obj.id || (tableName === 'bodyweight' ? obj.d : null);
         const validTime = obj.d || (obj.start ? new Date(obj.start).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10));
         trans.table('auditLog').add({
@@ -47,7 +48,8 @@ export function setupAuditHooks(db) {
     });
 
     table.hook('updating', function (modifications, primKey, obj, trans) {
-      if (trans && trans.tables && trans.tables.auditLog && !trans._skipAudit) {
+      const hasAudit = trans && (trans.tables?.auditLog || trans.storeNames?.includes('auditLog'));
+      if (hasAudit && !trans._skipAudit) {
         const entityId = primKey || obj.id;
         const validTime = modifications.d || obj.d || new Date().toISOString().slice(0, 10);
         const nextSnapshot = { ...obj, ...modifications };
@@ -98,3 +100,12 @@ export function createDatabase(name = 'openGym') {
 }
 
 export const db = createDatabase('openGym');
+
+export { liveQuery, useLiveQuery } from './hooks.js';
+export {
+  checkSet,
+  finishWorkoutSession,
+  editPastWorkout,
+  queryActiveWorkout
+} from './workout-operations.js';
+
