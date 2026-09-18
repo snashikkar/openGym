@@ -24,26 +24,24 @@ done-when:
 
 ---
 
-## Slice 2: `2-bitemporal-workout-logging-and-audit`
+## Slice 2: `2-bitemporal-workout-logging-and-audit` [SHIPPED]
 
 ```
 slice:        2-bitemporal-workout-logging-and-audit
-karma:        Active workout execution + bitemporal audit trail + remote sync export projection
-karaṇa:       Dexie transactions, Dexie table hooks (`db.table.hook`), useLiveQuery, syncExportProjection
-adhikaraṇa:   frontend/src/views/Workout.jsx, frontend/src/views/History.jsx, frontend/src/lib/sync.js
-sampradāna:   Slice 3 inherits working bitemporal workout execution, reactive UI hooks, and sync adapter
+status:       shipped & swept
 slice-branch: slice/2-bitemporal-workout-logging-and-audit
+commit:       bfd8183
+review:       ANUBIS PASS
 traceability:
   journeys: [jrn-bitemporal-workout-logging]
   screens:  [scr-active-workout-runner, scr-history-detail-editor]
+done-when:
+  1. tapping check on a set executes in <10ms within scoped transaction and updates live query — proven by test/workout-logging.test.js
+  2. completing workout session atomically computes vol, stamps end timestamp, updates lastPerformance, and appends completion audit — proven by test/workout-finish.test.js
+  3. retroactive edit of past workout date or load creates immutable revision in auditLog capturing who, valid-time, and tx-time — proven by test/audit-bitemporal-cycle.test.js
+  4. active workout queries execute in <= 3 read-ops via compound index and batch projection with zero N+1 queries — proven by test/bench/active-read.test.js
+  5. debounced remote sync invokes syncExportProjection, serializing Dexie tables into monolithic body.state JSON and handling HTTP 409 conflict detection — proven by test/sync-projection.test.js
 ```
-
-### Done-When Acceptance Criteria
-1. Tapping check on a set executes in $<10\text{ ms}$ within a Dexie transaction scoped to `[workouts, sets, auditLog]`, immediately updating `useLiveQuery` active workout view — proven by `test/workout-logging.test.js`.
-2. Completing a workout session atomically computes `vol`, stamps `end` timestamp, updates the `lastPerformance` table for all session exercises, and appends completion audit entry — proven by `test/workout-finish.test.js`.
-3. Retroactive edit of past workout date or load creates an immutable revision record in `auditLog` capturing actor `who`, valid-time, and transaction-time without destroying historical state (Gahana temporal cycle) — proven by `test/audit-bitemporal-cycle.test.js`.
-4. Active workout queries execute in $\le 3$ read-ops via compound index `[workoutId+order]` and `lastPerformance.where('exerciseId').anyOf()` with zero N+1 queries — proven by `test/bench/active-read.test.js`.
-5. Debounced remote sync invokes `syncExportProjection`, serializing Dexie tables into monolithic `body.state` JSON matching backend `PUT /api/data` contract (DEC-05) and handling HTTP 409 conflict detection — proven by `test/sync-projection.test.js`.
 
 ---
 

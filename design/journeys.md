@@ -11,36 +11,8 @@ Sequenced user journeys for the Dexie.js (IndexedDB) persistence migration, bite
 ---
 
 ## Journey 2: `bitemporal-workout-logging`
-
-```
-journey:      bitemporal-workout-logging
-kartā:        athlete (logging sets during training or retroactively editing past workouts)
-karma:        workout session, exercise entries, set records, and audit log
-karaṇa:       Dexie transactional write + useLiveQuery reactive subscription
-adhikaraṇa:   active-workout-screen, history-detail-screen
-```
-
-### Scenarios (BDD Acceptance Criteria)
-
-#### happy-path
-- **Given** an athlete performing an active workout session
-- **When** the athlete marks a work set as complete with weight, reps, and RIR
-- **Then** the set record is written to IndexedDB with valid-time (`start` timestamp) and transaction-time (`now`), an entry is appended to `auditLog`, the reactive `useLiveQuery` hook updates the active view within 16 ms, and debounced remote sync invokes `syncExportProjection` to package the state for `PUT /api/data` preserving server compatibility (DEC-05).
-
-#### alternate-paths
-- **Given** an athlete reviewing a workout finished three weeks ago in the History tab
-- **When** the athlete retroactively modifies the weight of a bench press set and changes the recorded date
-- **Then** the set record updates in IndexedDB, a new revision entry is appended to `auditLog` capturing the prior state, the new valid date, and the current transaction timestamp, and downstream PR and 1RM metrics re-evaluate chronologically.
-
-#### edge-cases
-- **Given** an athlete training in a gym basement with zero network connectivity checking off 5 rapid warm-up sets in under 30 seconds
-- **When** the rapid taps occur
-- **Then** each set commit runs through local Dexie transactions sequentially without concurrency errors or lost updates, queuing local changes for later sync via `syncExportProjection`.
-
-#### failure-paths
-- **Given** an unexpected browser storage exception or transaction collision during set completion
-- **When** the database write fails
-- **Then** the transaction rolls back cleanly, the in-memory UI preserves the entered numbers, a warning banner appears with a retry button, and no inconsistent partial set state is committed.
+→ Shipped in Slice 2 (`slice/2-bitemporal-workout-logging-and-audit` @ bfd8183)
+→ Proven by `test/workout-logging.test.js`, `test/workout-finish.test.js`, `test/audit-bitemporal-cycle.test.js`, `test/bench/active-read.test.js`, `test/sync-projection.test.js`
 
 ---
 
