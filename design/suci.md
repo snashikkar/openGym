@@ -1,0 +1,6 @@
+- [prayoga] slice plan drafted · next: user picks slice 1 explicitly
+- [dhātu] complete (anubis validated: PASS)
+- [rūpa] complete
+- [bīja] complete (anubis validated: CONDITIONAL PASS -> resolved)
+- [archaeology] complete
+- [step-0] complete (gahana active)
