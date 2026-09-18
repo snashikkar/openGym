@@ -58,5 +58,9 @@
 - Alternatives considered: Full event-sourced append-only storage for every set row.
   - Rejected: Massive write amplification and unnecessary query complexity for a local-first mobile client; sidecar `auditLog` achieves identical bitemporal auditability without degrading UI query performance.
 
-
-
+## DEC-09: Repository-wide Bun workspace unification and legacy stack retirement
+- Status: Accepted
+- Context: openGym previously migrated the root database and headless IndexedDB test runner to Bun. However, subpackages (`frontend`, `api`, `mcp`) remained unhoisted with separate package managers, legacy `package-lock.json` files, and lingering Vitest configurations.
+- Decision: Configure root `package.json` with native Bun workspaces (`workspaces: ["frontend", "api", "mcp"]`). Unify all dependencies under a single root `bun.lock`. Permanently purge all `package-lock.json` files, Vitest packages, and Vitest configuration files across all packages. Standardize testing across all workspaces onto native `bun test`.
+- Alternatives considered: Maintaining separate Node/npm lockfiles and Vitest runners in subdirectories.
+  - Rejected: Divergent runtime environments, redundant lockfiles, slower CI runs, and fragmented developer workflows.

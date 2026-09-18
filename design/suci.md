@@ -1,4 +1,5 @@
-- [prayoga] all slices shipped (3/3) · project complete
+- [slice-4] build complete, tests green · slice-branch: slice/4-complete-bun-toolchain-and-old-stack-retirement · decisions: DEC-09
+- [prayoga] in progress (3/4 slices shipped)
 - [slice-3] shipped & swept · branch: slice/3-routines-bodyweight-and-state-cleanup @ 5e59ce5 · decisions: DEC-05..DEC-08
 - [slice-2] shipped & swept · branch: slice/2-bitemporal-workout-logging-and-audit @ bfd8183 · decisions: DEC-05..DEC-08
 - [slice-1] shipped & swept · branch: slice/1-bun-toolchain-and-lossless-migration @ 49439c6 · decisions: DEC-05..DEC-08

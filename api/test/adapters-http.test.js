@@ -185,7 +185,7 @@ test('an abort that lands during a retry pause sends nothing more and ends as a 
 
 test('a body that is not JSON on an error still yields a readable stderr', async () => {
   const f = fakeFetch([{ status: 502, body: '<html>bad gateway</html>' }]);
-  const r = await gemini.invoke({ cfg: {}, prompt: 'P', env, fetch: f });
+  const r = await gemini.invoke({ cfg: {}, prompt: 'P', env, fetch: f, retryDelayMs: 0 });
   assert.equal(r.code, 1);
   assert.match(r.stderr, /^502 .*bad gateway/);
 });

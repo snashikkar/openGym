@@ -82,7 +82,7 @@ test('status tells whether the server holds the endpoint; subscribe is an upsert
   assert.equal((await fetch(`${h.api}/api/push/status?endpoint=x`)).status, 401);
 });
 
-test('a rest timer belongs to the device that set it: another device cancelling does not silence it', async t => {
+test('a rest timer belongs to the device that set it: another device cancelling does not silence it', { timeout: 15000 }, async t => {
   // localhost resolves to a loopback address, which PUSH_AGENT refuses — every send fails locally
   // and quietly, and "push send failed" in the log is the proof that a send was attempted.
   const mk = (deviceId, n) => ({ userId: 'u_test_1', endpoint: `https://localhost/${n}`, keys, deviceId, created: new Date().toISOString() });

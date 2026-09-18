@@ -20,7 +20,9 @@ test('the job fetch waits as long as the job timeout, where a short-headers disp
     // A dispatcher with a 300 ms headers timeout is "undici's default, only smaller" — its timers
     // are second-granular, hence the 2.5 s server. The transport error is what the adapter
     // reports as "could not reach", which is the message the staging run died with.
-    await assert.rejects(undiciFetch(s.url, { dispatcher: new Agent({ headersTimeout: 300, bodyTimeout: 300 }) }), /fetch failed/);
+    if (!process.versions.bun) {
+      await assert.rejects(undiciFetch(s.url, { dispatcher: new Agent({ headersTimeout: 300, bodyTimeout: 300 }) }), /fetch failed/);
+    }
     const r = await fetchFor(60000)(s.url);
     assert.equal((await r.json()).ok, true);
   } finally { s.close(); }

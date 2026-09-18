@@ -2,8 +2,17 @@
   "name": "opengym",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "frontend",
+    "api",
+    "mcp"
+  ],
   "scripts": {
-    "test": "bun test"
+    "test": "bun test",
+    "test:all": "bun test && bun run --filter gym-api test && bun run --filter opengym-mcp test",
+    "build": "bun run --filter opengym-frontend build",
+    "dev": "bun run --filter opengym-frontend dev",
+    "start:api": "bun run --filter gym-api start"
   },
   "dependencies": {
     "dexie": "^4.0.11"
