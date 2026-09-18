@@ -45,26 +45,24 @@ done-when:
 
 ---
 
-## Slice 3: `3-routines-bodyweight-and-state-cleanup`
+## Slice 3: `3-routines-bodyweight-and-state-cleanup` [SHIPPED]
 
 ```
 slice:        3-routines-bodyweight-and-state-cleanup
-karma:        Routines, bodyweight weigh-ins, custom exercises, scalability stress testing & legacy purge
-karaṇa:       Dexie live queries, React 19 hooks, bun test performance harness
-adhikaraṇa:   frontend/src/views/Routines.jsx, frontend/src/views/Stats.jsx, frontend/src/store/useStore.js
-sampradāna:   Final operational release; project dissolution sweep
+status:       shipped & swept
 slice-branch: slice/3-routines-bodyweight-and-state-cleanup
+commit:       5e59ce5
+review:       ANUBIS PASS
 traceability:
   journeys: [jrn-lossless-storage-migration, jrn-bitemporal-workout-logging]
   screens:  [scr-active-workout-runner, scr-history-detail-editor]
+done-when:
+  1. routine templates create, edit, and soft-delete via Dexie transactions, preserving foreign key integrity in historical workouts — proven by test/routine-management.test.js
+  2. daily weigh-ins enforce unique date index &d, upserting same-day records and capturing audit entries — proven by test/bodyweight-logging.test.js
+  3. scalability benchmark querying 25,000 sets and 1,000 workouts completes in <50ms without UI thread freezing — proven by test/bench/scale-25k-sets.test.js
+  4. full test suite executes cleanly under bun test in CI with zero Vitest or Node dependencies — proven by test/ci-fitness.test.js
+  5. legacy synchronous localStorage reads permanently decoupled from app startup; dissolution sweep dissolves ledger into passing tests — proven by frontend/src/store/useStore.js
 ```
-
-### Done-When Acceptance Criteria
-1. Routine templates create, edit, and soft-delete (`_deleted: true`) via Dexie transactions, preserving foreign key integrity in historical workouts — proven by `test/routine-management.test.js`.
-2. Daily weigh-ins enforce unique date index `&d`, upserting same-day records and capturing audit entries — proven by `test/bodyweight-logging.test.js`.
-3. Scalability benchmark querying 25,000 sets and 1,000 workouts completes in $<50\text{ ms}$ without UI thread freezing — proven by `test/bench/scale-25k-sets.test.js`.
-4. Full test suite executes cleanly under `bun test` in CI in $<500\text{ ms}$ with zero Vitest or Node dependencies — proven by `test/ci-fitness.test.js`.
-5. Legacy synchronous `localStorage` reads permanently decoupled from app startup; dissolution sweep dissolves ledger into passing tests.
 
 ---
 

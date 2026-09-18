@@ -1,7 +1,7 @@
-- [slice-3] tests green, slice-review pending · slice-branch: slice/3-routines-bodyweight-and-state-cleanup
+- [prayoga] all slices shipped (3/3) · project complete
+- [slice-3] shipped & swept · branch: slice/3-routines-bodyweight-and-state-cleanup @ 5e59ce5 · decisions: DEC-05..DEC-08
 - [slice-2] shipped & swept · branch: slice/2-bitemporal-workout-logging-and-audit @ bfd8183 · decisions: DEC-05..DEC-08
 - [slice-1] shipped & swept · branch: slice/1-bun-toolchain-and-lossless-migration @ 49439c6 · decisions: DEC-05..DEC-08
-- [prayoga] slice 2 shipped (2/3) · next: slice 3
 - [dhātu] complete (anubis validated: PASS)
 - [rūpa] complete
 - [bīja] complete (anubis validated: CONDITIONAL PASS -> resolved)
