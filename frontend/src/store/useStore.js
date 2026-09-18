@@ -309,7 +309,8 @@ export const useStore = create((set, get) => {
   }
 
   return {
-    S: (() => { const s = loadState(); registerCustom(s.customEx); return s })(),
+    // Decoupled from legacy synchronous localStorage reads at app startup
+    S: clone(DEF),
     user: (() => { try { return JSON.parse(localStorage.getItem('gym_user')) || null } catch { return null } })(),
     ready: false,
     // Server sync as the banner sees it (components/SyncBanner.jsx). Only meaningful signed in.

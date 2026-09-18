@@ -39,7 +39,7 @@ export function setupAuditHooks(db) {
           entity: tableName,
           entityId,
           op: 'create',
-          who: obj._who || 'athlete',
+          who: obj._who || trans?._who || 'athlete',
           validTime,
           txTime: Date.now(),
           snapshot: JSON.stringify(obj)
@@ -57,7 +57,7 @@ export function setupAuditHooks(db) {
           entity: tableName,
           entityId,
           op: modifications._deleted ? 'delete' : 'update',
-          who: modifications._who || 'athlete',
+          who: modifications._who || trans?._who || obj._who || 'athlete',
           validTime,
           txTime: Date.now(),
           snapshot: JSON.stringify(nextSnapshot)
@@ -108,4 +108,17 @@ export {
   editPastWorkout,
   queryActiveWorkout
 } from './workout-operations.js';
+export {
+  createRoutine,
+  updateRoutine,
+  deleteRoutine,
+  queryRoutines,
+  queryRoutineById
+} from './routine-operations.js';
+export {
+  logBodyweight,
+  deleteBodyweight,
+  queryBodyweight
+} from './bodyweight-operations.js';
+
 
