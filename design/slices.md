@@ -70,22 +70,20 @@ done-when:
 
 ```
 slice:        4-complete-bun-toolchain-and-old-stack-retirement
-karma:        Monorepo workspace unification, complete Vitest/Node retirement across frontend/api/mcp, unified Bun build & test pipeline
-karaṇa:       Bun workspaces, native bun test, Vite under Bun
-adhikaraṇa:   package.json, frontend/package.json, api/package.json, mcp/package.json, bunfig.toml
-sampradāna:   Clean unified Bun monorepo pipeline for next UI view wiring
+status:       shipped & swept
 slice-branch: slice/4-complete-bun-toolchain-and-old-stack-retirement
+commit:       0811212
+review:       ANUBIS PASS
 traceability:
   journeys: [jrn-bun-unified-development-pipeline]
   screens:  [scr-developer-test-dashboard]
+done-when:
+  1. root package.json declares workspaces ["frontend", "api", "mcp"] resolving all dependencies into a single root bun.lock — proven by test/bun-workspaces.test.js
+  2. all remaining Vitest dependencies, Vitest config files, and npm lockfiles permanently purged across the repository (frontend, api, mcp) — proven by test/ci-fitness.test.js
+  3. frontend builds cleanly via bun run build producing production assets in frontend/dist without Vite CLI failures — proven by test/bun-workspaces.test.js
+  4. API server test suite executes cleanly under native Bun runtime (bun test) — proven by test/api-bun.test.js
+  5. full workspace test suite across all packages executes cleanly under native Bun — proven by test/ci-fitness.test.js
 ```
-
-### Done-When Acceptance Criteria
-1. Root `package.json` declares workspaces `["frontend", "api", "mcp"]` resolving all dependencies into a single root `bun.lock` — proven by `test/bun-workspaces.test.js`.
-2. All remaining Vitest dependencies, Vitest config files, and npm lockfiles permanently purged across the repository (`frontend`, `api`, `mcp`) — proven by `test/ci-fitness.test.js`.
-3. Frontend builds cleanly via `bun run build` producing production assets in `frontend/dist` without Vite CLI failures — proven by `test/bun-workspaces.test.js`.
-4. API server test suite executes cleanly under native Bun runtime (`bun test`) — proven by `test/api-bun.test.js`.
-5. Full workspace test suite across all packages executes cleanly under native Bun — proven by test/ci-fitness.test.js.
 
 ---
 
