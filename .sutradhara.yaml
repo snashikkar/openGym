@@ -1,0 +1,5 @@
+schema: sutradhara/sdcs-0.4
+collaboration:
+  mode: solo
+capabilities:
+  remote_repository: true
