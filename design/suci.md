@@ -1,4 +1,4 @@
-- [slice-3] ready to cut branch · base: trunk tip (slice-2 swept) · next: cut slice/3-routines-bodyweight-and-state-cleanup
+- [slice-3] tests green, slice-review pending · slice-branch: slice/3-routines-bodyweight-and-state-cleanup
 - [slice-2] shipped & swept · branch: slice/2-bitemporal-workout-logging-and-audit @ bfd8183 · decisions: DEC-05..DEC-08
 - [slice-1] shipped & swept · branch: slice/1-bun-toolchain-and-lossless-migration @ 49439c6 · decisions: DEC-05..DEC-08
 - [prayoga] slice 2 shipped (2/3) · next: slice 3
