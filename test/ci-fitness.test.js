@@ -20,6 +20,8 @@ describe('CI Fitness & Toolchain Modernization (Slice 3 & 4 Done-When)', () => {
       };
 
       expect(allDeps['vitest']).toBeUndefined();
+      expect(allDeps['@vitejs/plugin-react']).toBeUndefined();
+      expect(allDeps['vite']).toBeUndefined();
       expect(allDeps['@vitest/ui']).toBeUndefined();
       expect(allDeps['@vitest/coverage-v8']).toBeUndefined();
       expect(allDeps['jest']).toBeUndefined();
@@ -42,14 +44,28 @@ describe('CI Fitness & Toolchain Modernization (Slice 3 & 4 Done-When)', () => {
     expect(existsSync('mcp/package-lock.json')).toBe(false);
   });
 
-  it('verifies absence of lingering vitest or legacy test configuration files', () => {
+  it('verifies absence of lingering vitest, vite, or legacy configuration files', () => {
     expect(existsSync('vitest.config.js')).toBe(false);
     expect(existsSync('vitest.config.ts')).toBe(false);
     expect(existsSync('frontend/vitest.config.js')).toBe(false);
     expect(existsSync('mcp/vitest.config.js')).toBe(false);
     expect(existsSync('api/vitest.config.js')).toBe(false);
     expect(existsSync('jest.config.js')).toBe(false);
+    expect(existsSync('vite.config.js')).toBe(false);
+    expect(existsSync('vite.config.ts')).toBe(false);
+    expect(existsSync('frontend/vite.config.js')).toBe(false);
+    expect(existsSync('frontend/vite.config.ts')).toBe(false);
   });
+
+  it('verifies frontend build and dev scripts execute native Bun scripts without Vite (DEC-10)', () => {
+    const pkg = JSON.parse(readFileSync('frontend/package.json', 'utf8'));
+    expect(pkg.scripts?.dev).toBe('bun scripts/dev.js');
+    expect(pkg.scripts?.build).toBe('bun scripts/build.js');
+    expect(pkg.scripts?.preview).toBe('bun scripts/preview.js');
+    expect(pkg.scripts?.['build:mobile']).toContain('bun scripts/build.js');
+    expect(pkg.scripts?.['build:mobile']).not.toContain('vite');
+  });
+
 
   it('verifies execution occurs on native Bun runtime with unified bun.lock', () => {
     expect(process.versions?.bun).toBeDefined();

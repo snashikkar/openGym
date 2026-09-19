@@ -64,3 +64,11 @@
 - Decision: Configure root `package.json` with native Bun workspaces (`workspaces: ["frontend", "api", "mcp"]`). Unify all dependencies under a single root `bun.lock`. Permanently purge all `package-lock.json` files, Vitest packages, and Vitest configuration files across all packages. Standardize testing across all workspaces onto native `bun test`.
 - Alternatives considered: Maintaining separate Node/npm lockfiles and Vitest runners in subdirectories.
   - Rejected: Divergent runtime environments, redundant lockfiles, slower CI runs, and fragmented developer workflows.
+
+## DEC-10: Native Bun fullstack bundling and Vite retirement
+- Status: Accepted
+- Context: User directed that native Bun fullstack bundling (`bun build` and `Bun.serve`) replace Vite as top priority. Vitest was eliminated in DEC-09, leaving Vite active only in `frontend/` for client bundling, dev proxying, and service worker hashing.
+- Decision: Completely eliminate `vite` and `@vitejs/plugin-react` from repository dependencies. Implement native Bun build pipeline (`frontend/scripts/build.js`) utilizing `Bun.build` with browser target, asset hashing, public directory preservation, and automated service worker cache stamping (`__BUILD__`). Implement native development and preview servers (`frontend/scripts/dev.js`, `frontend/scripts/preview.js`) using `Bun.serve` with fullstack HTML imports, SPA routing fallback, and reverse-proxying with CSRF Origin validation. Maintain 100% compatibility with Capacitor mobile builds (`dist/`).
+- Alternatives considered: Retaining Vite as hybrid bundler with Bun runtime.
+  - Rejected: Incurs hundreds of unnecessary npm dependencies, redundant build toolchain layers, and slower build cycles.
+

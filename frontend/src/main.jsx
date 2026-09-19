@@ -1,3 +1,6 @@
+// Ensure __APP_VERSION__ is defined in development if not inlined by bundler
+globalThis.__APP_VERSION__ ??= '1.3.7';
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
