@@ -72,3 +72,13 @@
 - Alternatives considered: Retaining Vite as hybrid bundler with Bun runtime.
   - Rejected: Incurs hundreds of unnecessary npm dependencies, redundant build toolchain layers, and slower build cycles.
 
+## DEC-11: Sourced external and regulatory must-be obligations migration (Nirvāha)
+- Status: Accepted
+- Context: Step 3b of Nirvāha requires migrating `must-be` source table obligations from `journeys.md` and `model.md` into `decisions.md` before transient design ledger files dissolve.
+- Decision: Formally record the following non-negotiable external standards and compliance invariants as permanent architectural constraints:
+  1. W3C IndexedDB API v3.0 Specification (§4.2): Requires structured cloning, ACID transactions, and bounded compound index range queries. Implemented in Dexie schema definition (`frontend/src/db/index.js`) and verified via `test/bench/active-read.test.js` and `test/workout-logging.test.js`.
+  2. Sutradhāra Gahana Overlay (`references/gahana.md:79`): Requires an immutable, append-only audit trail (`auditLog`) capturing actor `who`, `validTime`, `txTime`, and entity snapshots for all retroactive mutations and soft deletions. Implemented in `frontend/src/db/index.js` and verified by `test/audit-bitemporal-cycle.test.js`.
+  3. Dexie.js v4 ACID Transaction Boundaries: Requires atomic rollbacks on validation constraint errors across multiple stores (`[workouts, sets, lastPerformance, auditLog]`). Enforced in `frontend/src/db/workout-operations.js` and verified by `test/workout-finish.test.js` and `test/migration-lossless.test.js`.
+- Alternatives considered: Dissolving source tables without ADR migration.
+  - Rejected: Violates Sutradhāra Nirvāha Step 3b; externally imposed regulatory/spec constraints must retain verifiable evidence records post-dissolution.
+
