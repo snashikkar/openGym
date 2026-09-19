@@ -2,7 +2,7 @@
 // until a mode is chosen. Asserted on the source, the way coach.test.js pins the store field —
 // a static import of the core here would pass every behavioural test and still ship the
 // catalogue, the prompts and the validator to a phone that never asked for a Coach.
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
 const src = readFileSync(new URL('./CoachSetup.jsx', import.meta.url), 'utf8')

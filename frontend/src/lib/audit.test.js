@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { auditCat, auditLabel, auditReason, auditLine, fmtWhen } from './audit.js'
 
 // Every event name and reason code the server can emit (api/server.js, the audit block).

@@ -1,7 +1,7 @@
 // The note sheet is new JSX and nothing else mounts it, so a bad hook order, a missing import or
 // a wrong store path would only surface on a real device. Render it through the real sheet stack
 // and drive a save, so the wiring is checked and not just the shape of the module.
-import { describe, expect, it, beforeEach, afterEach } from 'vitest'
+import { describe, expect, it, beforeEach, afterEach } from 'bun:test'
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useStore } from '../store/useStore.js'
@@ -34,7 +34,7 @@ const type = (el, value) => {
 
 describe('exercise note sheet', () => {
   beforeEach(() => {
-    // React only treats act() as real when told it is in a test environment, and vitest shares
+    // React only treats act() as real when told it is in a test environment, and bun:test shares
     // a worker across files — so set it per test rather than once at module scope.
     globalThis.IS_REACT_ACT_ENVIRONMENT = true
     useUI.setState({ sheets: [] })

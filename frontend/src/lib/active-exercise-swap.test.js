@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { swapActiveExercise } from './active-exercise-swap.js'
 
 const entry = (id, { sg, done = false, target, sets } = {}) => ({

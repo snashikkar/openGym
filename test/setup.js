@@ -21,7 +21,7 @@ if (globalThis.window) {
 }
 
 if (typeof globalThis.__APP_VERSION__ === 'undefined') {
-  globalThis.__APP_VERSION__ = '1.3.7';
+  globalThis.__APP_VERSION__ = '1.4.0';
 }
 
 if (typeof import.meta.env === 'undefined') {

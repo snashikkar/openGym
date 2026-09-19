@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { buildSets } from './history.js'
 
 // A session that logged warm-ups, the way finish-workout persists it: warm-up rows and work

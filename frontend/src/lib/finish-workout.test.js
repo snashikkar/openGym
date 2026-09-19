@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { buildCompletedWorkout } from './finish-workout.js'
 
 describe('completed workout boundary', () => {

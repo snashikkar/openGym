@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { scanCode, importCodeFromImage } from './scan.js'
 
 // In the test environment VITE_MOBILE is unset, so MOBILE is false — the same as a web build.

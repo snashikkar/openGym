@@ -2,7 +2,7 @@
 /* Signed in, the server's profile is the truth: sign-in adopts it whatever the timestamps say,
    asking only about entries the device logged while signed out; the store polls the revision
    while open and flags offline / unsynced for the banner. */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 
 vi.mock('../lib/api.js', () => ({ api: vi.fn() }))
 const { toast } = vi.hoisted(() => ({ toast: vi.fn() }))

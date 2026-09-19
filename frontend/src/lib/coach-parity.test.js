@@ -7,11 +7,11 @@
  * every set as a loaded rep set, so a push-up progression that was working would have looked
  * like a stalled bench press with the weight left at zero.
  *
- * This test only runs under vitest, which can load both runtimes. It compares behaviour over a
+ * This test runs under bun:test, which can load both runtimes. It compares behaviour over a
  * table of configs rather than comparing source, so the two are free to be written differently
  * as long as they answer the same.
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { modeOf as uiModeOf, isBw as uiIsBw, isPerSide as uiIsPerSide } from './history.js'
 import { modeOf as srvModeOf, isBw as srvIsBw, isPerSide as srvIsPerSide } from '../../../api/coach/core/payload.js'
 import { exOr } from './exercises.js'

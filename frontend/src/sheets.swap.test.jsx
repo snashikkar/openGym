@@ -1,7 +1,7 @@
 import { LANGS, DERIVED_LOCALES } from './lib/i18n-core.js'
 import { getLocalePacks } from './lib/test-locales.js'
 import { act } from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'bun:test'
 import { swapActiveWorkoutExercise } from './sheets.jsx'
 import { EXDB } from './lib/exercises.js'
 import { DEF, useStore } from './store/useStore.js'

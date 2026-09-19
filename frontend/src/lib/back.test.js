@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { decideBack, makeBackHandler, EXIT_WINDOW } from './back.js'
 
 // Back on Android has to serve three layers with one event: the sheet stack on top, the

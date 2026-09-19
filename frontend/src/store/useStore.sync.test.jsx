@@ -3,7 +3,7 @@
    (409 with the current copy), the store merges and pushes again; a pull adopts, pushes or
    merges by comparing the server revision and its own marker; nothing pushes before boot has
    pulled; coming back to the tab pulls. */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 
 vi.mock('../lib/api.js', () => ({ api: vi.fn() }))
 const { toast } = vi.hoisted(() => ({ toast: vi.fn() }))

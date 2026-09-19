@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'bun:test'
 import { tappable, revealChip } from './use-sheet-keyboard.js'
 
 const keyEvent = (key, target) => {

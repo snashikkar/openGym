@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'bun:test'
 
 // The whole point of the module is surviving what the browser does on its own: it drops the
 // lock every time the document goes hidden. So the fake browser here has to do that too,

@@ -14,7 +14,7 @@
     },
     "api": {
       "name": "gym-api",
-      "version": "1.3.7",
+      "version": "1.4.0",
       "dependencies": {
         "@simplewebauthn/server": "^13.1.1",
         "undici": "^7.29.0",
@@ -26,7 +26,7 @@
     },
     "frontend": {
       "name": "opengym-frontend",
-      "version": "1.3.7",
+      "version": "1.4.0",
       "dependencies": {
         "@aparajita/capacitor-secure-storage": "^7.1.6",
         "@capacitor-mlkit/barcode-scanning": "^7.5.0",

@@ -1,7 +1,6 @@
 import { GlobalWindow } from 'happy-dom';
 import 'fake-indexeddb/auto';
-import { vi } from 'vitest';
-import { setSystemTime } from 'bun:test';
+import { vi, setSystemTime } from 'bun:test';
 
 const stubbedGlobals = new Map();
 
@@ -119,7 +118,7 @@ if (globalThis.window) {
 }
 
 if (typeof globalThis.__APP_VERSION__ === 'undefined') {
-  globalThis.__APP_VERSION__ = '1.3.7';
+  globalThis.__APP_VERSION__ = '1.4.0';
 }
 
 if (typeof globalThis.Notification === 'undefined') {

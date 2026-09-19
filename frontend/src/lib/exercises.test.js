@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { matchExercise, normalizeStr } from './exercises.js'
 import { _setLangState } from './i18n-core.js'
 

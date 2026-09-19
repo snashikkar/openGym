@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { normalizeFmt, canRenderFmt } from './qr.js'
 
 // The QR helpers decide which scanned/typed codes the check-in feature will store: it can read

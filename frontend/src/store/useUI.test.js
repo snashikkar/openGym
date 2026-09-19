@@ -1,5 +1,5 @@
 // useUI pulls in api.js, which reads navigator.userAgent at module scope.
-import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest'
+import { describe, expect, it, beforeEach, afterEach, vi } from 'bun:test'
 import { useUI } from './useUI.js'
 import { useStore } from './useStore.js'
 

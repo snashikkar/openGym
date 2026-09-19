@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test } from 'bun:test'
 import { createHash } from 'node:crypto'
 import pt from '../locales/pt.js'
 import ptBR, { PT_BR_OVERRIDES } from '../locales/pt-BR.js'

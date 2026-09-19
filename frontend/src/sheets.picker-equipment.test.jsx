@@ -3,7 +3,7 @@
 // per-body-part chips no longer clear the equipment selection; the eqOn fallback only drops it
 // for the current view when the new body part has nothing under that equipment.
 import React, { act } from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 import { createRoot } from 'react-dom/client'
 import { DEF, useStore } from './store/useStore.js'
 import { useUI } from './store/useUI.js'

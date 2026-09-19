@@ -2,7 +2,7 @@
 // here with a fake provider — payload → prompt → HTTP adapter → parser → validator → a proposal
 // the apply engine accepts. Also the three things this mode has to get right on its own: the
 // daily cap, the key never touching S, and a proposal surviving in the device file.
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'bun:test'
 
 // The device file and the secret store are in-memory here; nativeFetch is the script.
 const device = { data: null }

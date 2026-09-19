@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { matchExercise, matchHevyTitle, parseWorkoutCSV, detectSource } from './import-csv.js'
 import { EXIDX } from './exercises.js'
 

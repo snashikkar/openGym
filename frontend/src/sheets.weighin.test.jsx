@@ -1,5 +1,5 @@
 import { act } from 'react'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'bun:test'
 import { useStore } from './store/useStore.js'
 import { useUI } from './store/useUI.js'
 import { startFlow } from './sheets.jsx'

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { makeSideSet, setSideField, toggleSide, addSideDrop, setSideDropAt, isSideSet } from './workout-model.js'
 import { applyPrescription } from './progression.js'
 import { buildSessionEntries } from './session-start.js'

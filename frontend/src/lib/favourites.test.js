@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { favIds, isFav, toggleFav, sortFavouritesFirst } from './favourites.js'
 
 const ex = id => ({ id, n: id })

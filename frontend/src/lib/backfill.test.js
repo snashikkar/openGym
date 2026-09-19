@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { workoutsOn, backfillStart, backfillEnd, insertChronological, completeBackfill } from './backfill.js'
 
 const w = (id, d, start = 0) => ({ id, d, start })

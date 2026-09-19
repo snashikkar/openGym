@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { parseWorkoutCSV } from './import-csv.js'
 import { setLabel, effortOf } from './history.js'
 

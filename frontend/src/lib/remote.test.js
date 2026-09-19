@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { normalizeServerUrl } from './remote.js'
 
 // The pairing flow lives or dies on this being forgiving about what someone types on a phone

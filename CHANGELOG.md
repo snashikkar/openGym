@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.0 — 2026-09-19
+
+Modernized architecture and fullstack toolchain: complete migration to native Bun (`Bun.serve`, `Bun.build`, `bun:test`), Dexie.js (IndexedDB) client persistence with bitemporal audit logging, total purge of Vite and Vitest dependencies, and container modernization to `oven/bun:1-alpine`.
+
+- ⚡ **Native Bun fullstack toolchain**: replaced Vite with native Bun bundling (`frontend/scripts/build.js` via `Bun.build` in sub-100ms) and dev proxy (`frontend/scripts/dev.js` via `Bun.serve`). Unified monorepo dependencies under root `bun.lock` with native Bun workspaces (`frontend`, `api`, `mcp`).
+- 🧪 **Native `bun:test` runner**: purged all Vitest, Jest, and Mocha dependencies and config files; migrated all test suites and setup files to native `bun:test`. Added strict CI fitness tests enforcing zero Vitest/Vite remnants and zero npm lockfiles.
+- 💾 **Dexie.js IndexedDB persistence & bitemporal audit trail**: lossless client storage migration from synchronous `localStorage` to Dexie.js (IndexedDB) with scoped sub-10ms ACID transactions, reactive `useLiveQuery` subscriptions, and immutable bitemporal audit log tracking valid-time and transaction-time (DEC-08).
+- 🐳 **Docker runtime modernization**: migrated `web/Dockerfile` and `api/Dockerfile` build and runtime environments to `oven/bun:1-alpine`, eliminating local and container Node requirements for builds.
+- 🔌 **Native Bun MCP server**: modernized openGym Model Context Protocol server to native Bun runtime with shebang `#!/usr/bin/env bun` and direct stdio transport.
+- 📚 **Documentation & CI synchronization**: refreshed `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `docs/`, `website/`, and CI workflows (`.gitlab-ci.yml`, `.github/workflows/test.yml`) for the Bun toolchain.
+
 ## v1.3.7 — 2026-09-12
 
 The v1.3.6 tag's Android build failed on a double dash inside an XML comment, so the APK for everything in v1.3.6 is this one — plus the iPhone timer-sound fix that landed an hour later. Web bundle, APK and API image; v1.3.6 and v1.3.7 are the same code apart from the two items below.

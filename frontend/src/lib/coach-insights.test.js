@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { insightsFor, sessionInsights, windowWorkouts } from './coach-insights.js'
 import { EXIDX } from './exercises.js'
 

@@ -2,7 +2,7 @@
 // result list — after the search and body-part filters, without reordering the rest.
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 import Library from './Library.jsx'
 import { EXDB } from '../lib/exercises.js'
 

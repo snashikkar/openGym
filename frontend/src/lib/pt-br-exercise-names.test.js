@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import ptBR from '../exercise-names/pt-BR.js'
 import { EXDB } from './exercises-data.js'

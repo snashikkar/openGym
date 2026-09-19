@@ -2,7 +2,7 @@
 // wire the button straight to the loader, which quietly handed the click event in as the plan
 // id and loaded nothing at all — so both entry points are pinned here.
 import React, { act } from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 import { createRoot } from 'react-dom/client'
 import { useStore } from '../store/useStore.js'
 import { starterPlanSheet } from '../sheets.jsx'

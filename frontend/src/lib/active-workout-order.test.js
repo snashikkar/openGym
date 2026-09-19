@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { canMoveActiveWorkoutUnit, moveActiveWorkoutUnit } from './active-workout-order.js'
 import { LANGS, DERIVED_LOCALES } from './i18n-core.js'
 import { PT_BR_OVERRIDES } from '../locales/pt-BR.js'

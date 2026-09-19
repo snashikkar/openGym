@@ -2,7 +2,7 @@
 // write the field, and the Plan list has to draw the week in that order.
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 import Settings from './Settings.jsx'
 import Plan from './Plan.jsx'
 

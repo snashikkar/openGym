@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import {
   FATIGUE_HALF_LIFE_MS,
   FATIGUE_MIN_SESSIONS,

@@ -3,7 +3,7 @@
 // first, labels sets the way the rest of the app does, and does not pretend an exercise
 // with no sessions has a curve.
 import React, { act } from 'react'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import { createRoot } from 'react-dom/client'
 import { useStore } from './store/useStore.js'
 import { useUI } from './store/useUI.js'

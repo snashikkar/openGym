@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, afterEach } from 'vitest'
+import { describe, expect, it, vi, afterEach } from 'bun:test'
 import {
   matchHevyTemplate, buildHevyExerciseMap, parseHevyWorkouts, parseHevyBodyweight,
   parseHevyRoutines, mergeHevyRoutines, localWhen, importHevyData, HevyApiError, HEVY_ID_MAP,

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { buildPlanBundle, mergePlan, parsePlan } from './plan-share.js'
 
 // There was no test file for plan sharing at all, which is how a whole prescription field

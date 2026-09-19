@@ -3,7 +3,7 @@
 // paired phone relies on that, because the admin may have switched the Coach on since boot.
 // The bug this pins: the phone never fetched it at all, and said "your server has no Coach
 // enabled" to a server whose admin was looking at a green test.
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 
 vi.mock('../lib/api.js', () => ({ api: vi.fn() }))
 

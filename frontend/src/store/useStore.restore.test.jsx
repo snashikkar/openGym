@@ -1,5 +1,5 @@
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 
 vi.mock('../lib/api.js', () => ({ api: vi.fn() }))
 // pushState reaches the toast through a lazy import of useUI (which imports this store) — the

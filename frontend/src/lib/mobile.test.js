@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { isoOf } from './format.js'
 import { buildReminderNotifications } from './mobile.js'
 

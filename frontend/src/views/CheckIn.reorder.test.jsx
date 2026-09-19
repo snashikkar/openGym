@@ -8,7 +8,7 @@
 // visibilitychange listener at module load) and the scanner/sheet modules, so the file runs under
 // happy-dom with those heavy imports stubbed. The function under test touches none of them.
 
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'bun:test'
 
 vi.mock('../lib/scan.js', () => ({ scanCode: vi.fn(), importCodeFromImage: vi.fn() }))
 vi.mock('../components/CameraScan.jsx', () => ({ default: () => null }))

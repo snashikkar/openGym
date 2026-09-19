@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { FATIGUE_STATES, fatigueOf, strengthOf } from './recovery.js'
 import { fatigueStateOf } from './recovery-view.js'
 import { MUSCLES, levelsOf } from './muscles.js'

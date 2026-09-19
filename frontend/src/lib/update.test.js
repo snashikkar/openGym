@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'bun:test'
 import { checkForUpdate, sha256, resetUpdateCheck } from './update.js'
 
 // __APP_VERSION__ is defined at build time by frontend/scripts/build.js (reads package.json).

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { BODYPARTS, EXDB, EXIDX, registerCustom } from './exercises.js'
 import { COMPOUND_LIFT_BATCH_1 } from './exercise-muscle-batch-1.js'
 import { MUSCLES, musclesOf } from './muscles.js'

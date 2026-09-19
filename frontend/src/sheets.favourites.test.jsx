@@ -1,7 +1,7 @@
 // Favourites (issue #6): the detail sheet's star writes S.favEx, and the picker floats
 // favourites to the top of its list without disturbing the order of everything else.
 import React, { act } from 'react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 import { createRoot } from 'react-dom/client'
 import { EXDB } from './lib/exercises.js'
 import { DEF, useStore } from './store/useStore.js'

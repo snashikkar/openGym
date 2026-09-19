@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'bun:test'
 import { installChipDrag } from './hchips.js'
 
 // A real .chips element with overridable scroll geometry and a clamping scrollLeft.

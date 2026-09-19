@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'bun:test'
 
 // A stand-in for what @capacitor/core's registerPlugin() really returns: a Proxy that turns ANY
 // property — `then` included — into a method wrapper whose native call fails asynchronously

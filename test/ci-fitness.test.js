@@ -111,4 +111,16 @@ describe('CI Fitness & Toolchain Modernization (Slice 3 & 4 Done-When)', () => {
     expect(storeSource).not.toMatch(/S:\s*\(\(\)\s*=>\s*\{\s*const\s+s\s*=\s*loadState/);
     expect(storeSource).toContain('Decoupled from legacy synchronous localStorage reads at app startup');
   });
+
+  it('verifies zero import statements from vitest across all codebase files', () => {
+    const { execSync } = require('node:child_process');
+    const result = execSync('git grep -E "from [\'\\"]vitest[\'\\"]" frontend/ mcp/ test/ || true', { encoding: 'utf8' }).trim();
+    expect(result).toBe('');
+  });
+
+  it('verifies absence of vitest and npm ci invocations in canonical GitLab CI pipeline', () => {
+    const gitlabCi = readFileSync('.gitlab-ci.yml', 'utf8');
+    expect(gitlabCi).not.toContain('vitest');
+    expect(gitlabCi).not.toContain('npm ci');
+  });
 });

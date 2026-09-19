@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { guestAllowed } from './guest.js'
 
 // The flag is the easy half. The half worth pinning down is what happens when the server did not

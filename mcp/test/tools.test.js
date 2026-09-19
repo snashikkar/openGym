@@ -2,7 +2,7 @@
 // deterministic fixture the public demo runs on. The pure lib functions have their own 92
 // tests in frontend/src/lib/*.test.js; here we pin JSON shape + the user-facing edge cases
 // (rest-day override, missing routine, zero-workout history, no synced state, superset links).
-import { describe, beforeAll, afterAll, beforeEach, test, expect, vi } from 'vitest'
+import { describe, beforeAll, afterAll, beforeEach, test, expect, vi } from 'bun:test'
 import { buildDemoState } from '../../frontend/src/lib/demoSeed.js'
 import { EXDB } from '../../frontend/src/lib/exercises.js'
 import { _seedStateForTests } from '../src/state.js'

@@ -46,8 +46,9 @@ stages:
   - maintenance
 
 variables:
-  # node:22-alpine in web/Dockerfile and api/Dockerfile — CI must match production.
-  NODE_IMAGE: "node:22-alpine"
+  # oven/bun:1-alpine in web/Dockerfile and api/Dockerfile — CI must match production.
+  BUN_IMAGE: "oven/bun:1-alpine"
+  NODE_IMAGE: "oven/bun:1-alpine"
   DOCKER_IMAGE: "docker:28-cli"
   DOCKER_DIND_IMAGE: "docker:28-dind"
   TRIVY_IMAGE: "aquasec/trivy:0.74.0"
@@ -153,48 +154,35 @@ test:frontend:
   cache:
     key:
       files:
-        - frontend/package-lock.json
+        - bun.lock
     paths:
-      - frontend/.npm
+      - .bun
   script:
-    - cd frontend
-    # --ignore-scripts: nothing here needs a postinstall, and the one package that has a
-    # heavy one (@capacitor/assets → sharp, a 10 MB libvips download from GitHub) is only
-    # used to draw app icons. That download timing out is what turned a release red.
-    - npm ci --cache .npm --prefer-offline --ignore-scripts
-    # JUnit → the MR widget lists exactly which tests failed; cobertura → coverage on the
-    # diff; text-summary → the number the coverage badge shows.
-    - npx vitest run
-        --reporter=default --reporter=junit --outputFile.junit=junit.xml
-        --coverage --coverage.reporter=text-summary --coverage.reporter=cobertura
+    - bun install --frozen-lockfile
+    - bun test
+    - bun run --filter opengym-frontend test
     # A broken import or bad JSX fails the build long before any test covers it.
-    - npm run build
+    - bun run build
     # What this commit costs on the wire, and — in an MR — what it adds compared with main.
     # main's numbers are the artifact of its last green test:frontend; report-only.
-    - node scripts/bundle-size.mjs --out bundle-size.json
+    - bun scripts/bundle-size.mjs --out bundle-size.json
     - |
       if [ "$CI_COMMIT_BRANCH" != "$CI_DEFAULT_BRANCH" ]; then
         wget -qO baseline.json "$CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_DEFAULT_BRANCH/raw/frontend/bundle-size.json?job=test:frontend" || true
-        node scripts/bundle-size.mjs --compare baseline.json bundle-size.json
+        bun scripts/bundle-size.mjs --compare baseline.json bundle-size.json
       fi
-    - node scripts/check-locales.mjs
+    - bun scripts/check-locales.mjs
     # check-locales compares the packs to each other, so a key missing from ALL of them is
     # invisible to it. This walks src/ instead. Report-only for now: there is a known
     # backlog of untranslated demo-view strings to clear before it can fail the build.
-    - node scripts/check-source-strings.mjs
+    - bun scripts/check-source-strings.mjs
     # The fatigue model must never read higher after a rest day than before it.
     # Property probe over ~108k comparisons; too slow for the unit suite, cheap here.
-    - npm run test:fatigue-probe
-  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
+    - bun run --filter opengym-frontend test:fatigue-probe
   artifacts:
     when: always
     paths:
       - frontend/bundle-size.json
-    reports:
-      junit: frontend/junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: frontend/coverage/cobertura-coverage.xml
     expire_in: 2 weeks
   rules:
     - !reference [.rules, not_on_schedule]
@@ -206,27 +194,15 @@ test:mcp:
   cache:
     key:
       files:
-        - mcp/package-lock.json
+        - bun.lock
     paths:
-      - mcp/.npm
+      - .bun
   script:
-    - cd mcp
-    - npm ci --cache .npm --prefer-offline --ignore-scripts
-    - npx vitest run
-        --reporter=default --reporter=junit --outputFile.junit=junit.xml
-        --coverage --coverage.reporter=text-summary --coverage.reporter=cobertura
-    # The MCP server is a bare node process. Client-only imports (import.meta.glob,
-    # .jsx imports, ?raw) do not resolve in plain Node. check:node-loadable verifies
+    - bun install --frozen-lockfile
+    - bun run --filter opengym-mcp test
+    # The MCP server is a native Bun process. check:node-loadable verifies
     # that shared lib modules stay loadable outside the bundler.
-    - npm run check:node-loadable
-  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
-  artifacts:
-    when: always
-    reports:
-      junit: mcp/junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: mcp/coverage/cobertura-coverage.xml
+    - bun run --filter opengym-mcp check:node-loadable
   rules:
     - !reference [.rules, not_on_schedule]
     - when: on_success
@@ -237,27 +213,18 @@ test:api:
   cache:
     key:
       files:
-        - api/package-lock.json
+        - bun.lock
     paths:
-      - api/.npm
+      - .bun
   script:
-    - cd api
-    - npm ci --cache .npm --prefer-offline --omit=optional
-    # The Coach tests run on node:test and drive the in-repo fixture provider plus a local mock
-    # of the Chat Completions shape, so the whole job works without an AI account or the network.
-    # Same suite `npm test` runs, plus the JUnit file and node's own coverage table.
-    - node --experimental-test-coverage --test
-        --test-reporter=spec --test-reporter-destination=stdout
-        --test-reporter=junit --test-reporter-destination=junit.xml
-        test/*.test.js
-    - cd ..
+    - bun install --frozen-lockfile
+    - bun run --filter gym-api test
     # The api's copy of the exercise catalogue and the prompt module are generated and committed.
     # A dataset or prompt change that forgets to regenerate them would otherwise only surface as
     # "the Coach can't find that exercise" — or a prompt edit that never reached the model.
-    - node scripts/build-coach-assets.mjs --check
-    # api/coach/core is imported by the server under bare node AND by the mobile client under Bun.
-    # Bundlers forgive what node does not (?raw, import.meta.glob); this runs outside bundlers.
-    - node api/scripts/check-core-loadable.mjs
+    - bun scripts/build-coach-assets.mjs --check
+    # api/coach/core is imported by the server under native Bun.
+    - bun api/scripts/check-core-loadable.mjs
   coverage: '/all files\s*\|\s*(\d+\.?\d*)/'
   artifacts:
     when: always
@@ -526,13 +493,12 @@ build:apk:
   script:
     - |
       set -eu
-      cd frontend
-      npm ci
-      # VITE_MOBILE build + `cap sync` into android/. The mobile flavor talks to no
-      # backend at all: no sign-in, no sync, media straight from the CDN.
-      npm run build:mobile
-      VER="$(node -p "require('./package.json').version")"
-      cd android
+      which bun >/dev/null 2>&1 || npm install -g bun
+      cd "$CI_PROJECT_DIR"
+      bun install --frozen-lockfile
+      bun run --filter opengym-frontend build:mobile
+      VER="$(bun -e "console.log(require('./frontend/package.json').version)")"
+      cd frontend/android
       ./gradlew --no-daemon assembleRelease
       UNSIGNED=app/build/outputs/apk/release/app-release-unsigned.apk
       BT="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
@@ -629,15 +595,15 @@ build:ios:
   script:
     - |
       set -eu
-      cd frontend
-      npm ci
-      # `cap sync` also runs `pod install` for ios/ on macOS.
-      npm run build:mobile
-      VER="$(node -p "require('./package.json').version")"
+      which bun >/dev/null 2>&1 || npm install -g bun
+      cd "$CI_PROJECT_DIR"
+      bun install --frozen-lockfile
+      bun run --filter opengym-frontend build:mobile
+      VER="$(bun -e "console.log(require('./frontend/package.json').version)")"
       # Build number = the Android versionCode, so both apps count the same way.
-      BUILD="$(sed -n 's/^ *versionCode \([0-9]*\).*/\1/p' android/app/build.gradle | sed -n 1p)"
-      [ -n "$BUILD" ] || { echo "could not read versionCode from android/app/build.gradle" >&2; exit 1; }
-      cd ios/App
+      BUILD="$(sed -n 's/^ *versionCode \([0-9]*\).*/\1/p' frontend/android/app/build.gradle | sed -n 1p)"
+      [ -n "$BUILD" ] || { echo "could not read versionCode from frontend/android/app/build.gradle" >&2; exit 1; }
+      cd frontend/ios/App
       xcodebuild -workspace App.xcworkspace -scheme App -configuration Release         -destination 'generic/platform=iOS'         -archivePath "$PWD/build/App.xcarchive"         MARKETING_VERSION="$VER" CURRENT_PROJECT_VERSION="$BUILD"         CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""         archive | tail -40
       # An .ipa is a zip with the .app under Payload/.
       rm -rf Payload && mkdir Payload
@@ -794,18 +760,17 @@ pages:
   stage: deploy
   needs: ["test:frontend"]
   variables:
+    DEMO: "1"
     VITE_DEMO: "1"
   cache:
     key:
       files:
-        - frontend/package-lock.json
+        - bun.lock
     paths:
-      - frontend/.npm
+      - .bun
   script:
-    - cd frontend
-    - npm ci --cache .npm --prefer-offline --ignore-scripts
-    - VITE_IMG_BASE="$DATASET/images/" VITE_GIF_BASE="$DATASET/videos/" npm run build
-    - cd ..
+    - bun install --frozen-lockfile
+    - IMG_BASE="$DATASET/images/" GIF_BASE="$DATASET/videos/" bun run --filter opengym-frontend build
     - rm -rf public && mv frontend/dist public
   artifacts:
     paths:

@@ -1,6 +1,6 @@
 // lib/sound.js keeps one AudioContext per page; each test gets a fresh module so that state
 // does not leak. The fake context records what the real one would be asked to do.
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test'
 
 class FakeCtx {
   constructor() {

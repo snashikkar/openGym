@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { exerciseHistory, HISTORY_SESSIONS } from './exercise-history.js'
 import { estimate1RM } from './onerm.js'
 

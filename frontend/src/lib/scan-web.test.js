@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'bun:test'
 import { generate } from 'lean-qr'
 import { decodeImageData } from './scan-web.js'
 
