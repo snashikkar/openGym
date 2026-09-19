@@ -169,7 +169,7 @@ mobile app is the install-and-done flavor.
                                         └──────────────────────────┘
 ```
 
-- **frontend/** — React + Vite (React Router + Zustand), built to static files **inside Docker**
+- **frontend/** — React 19 + native Bun fullstack (React Router, Zustand, Dexie.js IndexedDB), built to static files **inside Docker** (or via `bun run build`)
 - **api/** — Node with no framework, two dependencies (`@simplewebauthn/server` for passkeys, `web-push` for notifications), storing everything as plain JSON files under `./data`
 - **web/** — a multi-stage image that builds the frontend and serves it with nginx, proxying `/api` to the backend so it's all on **one origin** (passkeys require this)
 
@@ -224,16 +224,16 @@ trainer role, MCP write), the iOS app, the Android and health items, and what al
 
 ## Tech
 
-React 19 + Vite (React Router, Zustand) · Node (no framework) · nginx · Docker Compose ·
+React 19 + native Bun (React Router, Zustand, Dexie.js IndexedDB) · Bun/Node backend (no framework) · nginx · Docker Compose ·
 WebAuthn · exercise data from [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset)
 (MIT metadata and instructions; media © Gym visual — see [License](#license)).
-No database server, no cloud dependencies — the frontend builds inside Docker, so self-hosting
+No database server, no cloud dependencies — the frontend builds natively with Bun (`bun run build`), so self-hosting
 stays a one-command `docker compose up`.
 
 The training logic — progression rules, 1RM estimation, how a logged session is read back —
-lives in pure functions under `frontend/src/lib/` with tests next to them: `npm test` in
-`frontend/`. Vitest is a dev dependency; the app itself ships no runtime dependencies beyond
-React, the router and Zustand.
+lives in pure functions under `frontend/src/lib/` with tests next to them: `bun test` in
+repository root or `frontend/`. Testing runs natively via `bun:test` with zero Vitest dependencies; the app itself ships no runtime dependencies beyond
+React, the router, Zustand, and Dexie.js.
 
 The optional AI Coach (`api/coach/`) is built the same way round: a by-name allowlist decides
 what may leave the server, and a closed-list validator decides what may come back — the model

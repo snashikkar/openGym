@@ -11,7 +11,7 @@ openGym ships in two flavors from the same codebase:
 | Exercise media | served by your server (`img/`, `gif/`) | loaded from the jsDelivr CDN |
 
 The mobile flavor never talks to a backend by default: no sign-in screen, no sync, no
-telemetry. State is mirrored from `localStorage` into `opengym-state.json` in the app's
+telemetry. State is mirrored from Dexie.js (IndexedDB) into `opengym-state.json` in the app's
 private data directory on every change (iOS is allowed to evict WebView storage under
 pressure — the file mirror is the durable copy and is restored on launch). Backups go out
 through the OS share sheet instead of a browser download.
@@ -42,7 +42,7 @@ or Settings → **"Connect to my server"** later) to finish. Notes:
 
 ## Prerequisites
 
-- Node 20+
+- Node 20+ / Bun 1.2+
 - **Android:** Android Studio (bundles the SDK). Java 21 for Gradle.
 - **iOS:** a Mac with Xcode 15+ and CocoaPods (`brew install cocoapods`). A free Apple ID
   is enough to run the app on your own iPhone (see below); paid membership is only needed
@@ -52,18 +52,18 @@ or Settings → **"Connect to my server"** later) to finish. Notes:
 
 ```sh
 cd frontend
-npm install
-npm run build:mobile        # VITE_MOBILE build + `cap sync` into android/ and ios/
+bun install
+bun run build:mobile        # VITE_MOBILE build + `cap sync` into android/ and ios/
 
 npx cap open android        # opens Android Studio → run on emulator or device
 npx cap open ios            # opens Xcode (Mac only) → set your signing team, then run
 ```
 
-`npm run build:mobile` bakes the CDN media base into the bundle and copies the web build
+`bun run build:mobile` bakes the CDN media base into the bundle and copies the web build
 into both native projects — re-run it after every web-code change before building natively.
 
 > **Heads-up:** after `build:mobile`, `frontend/dist` contains the *mobile* bundle.
-> Run a plain `npm run build` again before deploying `dist` to a server.
+> Run a plain `bun run build` again before deploying `dist` to a server.
 
 ## App icons & splash screens
 
@@ -100,7 +100,7 @@ Android asks you to allow installs from the browser the first time — that's st
 app outside the Play Store. Check the `.sha256` if you got the file from anywhere else.
 
 Both come out of CI: the `build:apk` job in [`.gitlab-ci.yml`](../.gitlab-ci.yml) runs
-`npm run build:mobile` and `./gradlew assembleRelease`, then `zipalign`s and signs the result
+`bun run build:mobile` and `./gradlew assembleRelease`, then `zipalign`s and signs the result
 with the release key. The job runs on every push to `main` too, so the newest unreleased
 build is always one click away (signed with the same key, installs over a release):
 `https://gitlab.com/DuarteSantos8/opengym/-/jobs/artifacts/main/browse?job=build:apk`
@@ -113,7 +113,7 @@ what the release links to.
 To build and sign your own:
 
 ```sh
-cd frontend && npm run build:mobile
+cd frontend && bun run build:mobile
 cd android && ./gradlew assembleRelease            # → app/build/outputs/apk/release/app-release-unsigned.apk
 
 # one-time: create a keystore. KEEP IT — updates must be signed with the same key,

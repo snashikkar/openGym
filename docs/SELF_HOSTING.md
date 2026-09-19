@@ -326,10 +326,10 @@ everybody registers again — which is why it pays to settle the domain before o
 
 ### `VITE_IMG_BASE` / `VITE_GIF_BASE` are build-time, not run-time
 
-These two are read by Vite when the frontend is **compiled**, so their values are baked into
+These two are read by the Bun compiler (`frontend/scripts/build.js`) when the frontend is **compiled**, so their values are baked into
 the shipped JavaScript bundle. Setting them in the `.env` next to `docker compose` has no
 effect on an already-built image — the bundle has already made up its mind.
 
 They are only useful if you build the frontend yourself (`docker compose up -d --build`, or a
-`npm run build` with the variables exported). If you need to redirect media on a prebuilt
+`bun run build` with the variables exported). If you need to redirect media on a prebuilt
 image, do it in your reverse proxy instead.

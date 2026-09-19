@@ -12,9 +12,9 @@ License: AGPL-3.0-or-later.
 ## Project layout
 
 ```
-frontend/  React 19 + Vite app (src/views, src/components, src/store, src/lib). Builds to static files.
+frontend/  React 19 + native Bun fullstack app (src/views, src/components, src/store, src/lib, src/db). Builds to static files via scripts/build.js.
            android/ + ios/ are the Capacitor shells for the standalone mobile app (docs/MOBILE.md).
-api/       backend — server.js (Node, no framework), deps: @simplewebauthn/server, web-push.
+api/       backend — server.js (Node/Bun runtime, no framework), deps: @simplewebauthn/server, web-push.
 web/       multi-stage Dockerfile (builds frontend → nginx) + nginx.conf.template (serves app, proxies /api).
 mcp/       optional MCP server — read-only stdio bridge exposing a user's workouts/1RM/muscle
            balance to LLM clients (Claude Desktop, Cursor…). Not part of the Docker build; only
@@ -31,21 +31,21 @@ docs/      SELF_HOSTING.md, MOBILE.md.
 cp .env.example .env
 docker compose up -d --build
 
-# Frontend dev server (hot reload), proxies /api to :3000
-cd frontend && npm install && npm run dev
+# Fullstack dev servers (native Bun.serve hot reload)
+bun dev                              # runs frontend dev server on :5173, proxies /api to :3000
+bun run start:api                    # runs backend api server on :3000
 
-# Frontend tests (training logic: progression, 1RM, session read-back)
-cd frontend && npm test            # vitest run
-cd frontend && npm run test:watch
-npx vitest run src/lib/progression.test.js   # single file
-npx vitest run -t "some test name"           # single test by name
+# Test execution (native bun:test across unified workspaces)
+bun test                             # runs root BDD scenarios, Dexie IDB, & CI fitness tests
+bun run --filter opengym-frontend test # frontend unit tests
+bun test src/lib/progression.test.js # single test file
+bun test -t "some test name"         # single test by name
+bun run --filter gym-api test        # API test suite
+bun run --filter opengym-mcp test    # MCP server tests
 
-# MCP server tests
-cd mcp && npm test
-
-# Production build
-cd frontend && npm run build
-cd frontend && npm run build:mobile   # + cap sync, points media at the CDN dataset
+# Production build (native Bun.build)
+bun run build                        # compiles frontend into frontend/dist (sub-100ms)
+bun run build:mobile                 # VITE_MOBILE build + cap sync into android/ and ios/
 ```
 
 There is no linter/formatter configured (no ESLint/Prettier config in the repo) and no
@@ -61,11 +61,8 @@ signed Android APK, and deploys the demo/docs site. The Gitea and GitHub workflo
 
 ### Frontend (`frontend/src`)
 
-- **`store/useStore.js`** — single Zustand store holding the entire client-side app state (`S`),
-  persisted to `localStorage` (`gym_state_v1`) and debounce-pushed to the server when signed in
-  (`pushState`, see `lib/api.js`). On the Capacitor mobile build it's also mirrored to a file via
-  `lib/mobile.js` (`nativeSave`), since WebView storage can be evicted. `store/useUI.js` holds
-  ephemeral UI state (modals, active sheet, etc.) separately from persisted data.
+- **`db/`** — Dexie.js (IndexedDB) client persistence engine (`src/db/index.js`, `workout-operations.js`, `hooks.js`). Provides normalized stores (`workouts`, `sets`, `routines`, `bodyweight`, `auditLog`), reactive live queries (`useLiveQuery`), bitemporal audit trail (capturing valid-time and transaction-time per DEC-08), and sub-10ms scoped ACID transactions.
+- **`store/useStore.js`** — single Zustand store holding the client-side app state (`S`), integrated with Dexie.js persistence. Debounce-pushes state to server when signed in via `syncExportProjection` (`PUT /api/data`, DEC-05). On the Capacitor mobile build it maintains a filesystem backup mirror via `lib/mobile.js` (`nativeSave`, DEC-07) to guard against WebView eviction. `store/useUI.js` holds ephemeral UI state (modals, active sheet, etc.) separately from persisted data.
 - **`lib/`** — pure, framework-free helpers, each paired with a same-directory `*.test.js`. This
   is where the domain logic lives, most importantly:
   - `progression.js` — the progression-rule engine (linear, Greyskull LP, double progression,

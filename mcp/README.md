@@ -117,7 +117,9 @@ dependencies landed in `frontend/`, no public exports changed.
 ## Tests
 
 ```bash
-cd mcp && npm test
+bun test             # runs MCP tests from root or inside mcp/
+# or:
+bun run --filter opengym-mcp test
 ```
 
 58 cases seeding state from `frontend/src/lib/demoSeed.js` (the same deterministic fixture
