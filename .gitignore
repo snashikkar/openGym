@@ -15,7 +15,8 @@ node_modules/
 .DS_Store
 node_modules
 .claude/
-.agents/
+.agents/*
+!.agents/skills/
 
 # CI reports (test:* jobs write these next to the suites)
 junit.xml
