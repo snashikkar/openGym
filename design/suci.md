@@ -1,5 +1,5 @@
-- [slice-5] active · branch: slice/5-purge-vite-native-bun-fullstack · next: implement bun build/dev scripts and purge vite · decisions: DEC-10
-- [prayoga] slices 1-4 shipped · slice-5 in flight
+- [prayoga] all slices shipped (5/5) · project complete
+- [slice-5] shipped & swept · branch: slice/5-purge-vite-native-bun-fullstack @ f000e2f · decisions: DEC-10
 - [slice-4] shipped & swept · branch: slice/4-complete-bun-toolchain-and-old-stack-retirement @ 0811212 · decisions: DEC-09
 - [slice-3] shipped & swept · branch: slice/3-routines-bodyweight-and-state-cleanup @ 5e59ce5 · decisions: DEC-05..DEC-08
 - [slice-2] shipped & swept · branch: slice/2-bitemporal-workout-logging-and-audit @ bfd8183 · decisions: DEC-05..DEC-08
