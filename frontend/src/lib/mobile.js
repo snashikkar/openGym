@@ -1,4 +1,4 @@
-// Mobile build (VITE_MOBILE=1) — the standalone app-store version (Capacitor native shell).
+// Mobile build (MOBILE=1 or VITE_MOBILE=1) — the standalone app-store version (Capacitor native shell).
 //
 // There is no backend: nothing to sign in to, everything lives on the phone. Unlike guest
 // mode in a browser, this is the user's only copy of their training log, so it can't depend
@@ -13,7 +13,7 @@ import { t } from './i18n-core.js'
 import { isoOf, todayISO } from './format.js'
 import { effectiveRoutineIds } from './history.js'
 
-export let MOBILE = typeof import.meta.env !== 'undefined' && import.meta.env.VITE_MOBILE === '1'
+export let MOBILE = typeof import.meta.env !== 'undefined' && (import.meta.env.MOBILE === '1' || import.meta.env.VITE_MOBILE === '1')
 export function _setMobileForTest(v) { MOBILE = v }
 
 let _androidOverride = null

@@ -1,26 +1,21 @@
-# Multi-stage: build the React app, then serve it with nginx.
+# Multi-stage: build the React app with native Bun, then serve it with nginx.
 # Self-hosters never need Node locally — `docker compose up` builds everything.
 #
 # --platform=$BUILDPLATFORM pins the build stage to the host's native arch even when
 # cross-building for other targets (e.g. amd64 host building an arm64 image). The build
-# output (static JS/CSS/HTML) is arch-independent, so there's no reason to run it under
-# QEMU — and QEMU-emulated npm installs are known to corrupt esbuild/rollup's platform-
-# specific native binaries, which is what breaks `vite build` with unrelated-looking
-# module-resolution errors.
-FROM --platform=$BUILDPLATFORM node:22-alpine AS build
-# The frontend sits at /app/frontend, not /app: the Coach's runtime-neutral core lives in
+# output (static JS/CSS/HTML) is arch-independent, so there's no reason to run it under QEMU.
+FROM --platform=$BUILDPLATFORM oven/bun:1-alpine AS build
+# The frontend sits at /app/frontend: the Coach's runtime-neutral core lives in
 # api/coach/core and is imported from frontend/src as ../../../api/coach/core/*, so the two
-# have to keep the same relative position they have in the repository. Copying frontend/ alone
-# is exactly what made the v1.2.15 web image fail to build.
+# keep the same relative position they have in the repository.
+WORKDIR /app
+COPY package.json bun.lock bunfig.toml ./
+COPY frontend/package.json ./frontend/
+RUN bun install --frozen-lockfile
+COPY api/coach/core/ ./api/coach/core/
+COPY frontend/ ./frontend/
 WORKDIR /app/frontend
-COPY frontend/package.json frontend/package-lock.json* ./
-# --ignore-scripts: the web image only needs `vite build`; the one heavy postinstall in this tree
-# (@capacitor/assets -> sharp, a libvips download from GitHub) is for drawing app icons and has
-# timed out on the shared runners — a lockfile-ignoring `npm install` fallback is no answer to that.
-RUN npm ci --ignore-scripts
-COPY api/coach/core/ /app/api/coach/core/
-COPY frontend/ ./
-RUN npm run build
+RUN bun scripts/build.js
 
 FROM nginx:alpine
 # Same reason as in api/Dockerfile: alpine fixes land faster than the nginx image is rebuilt.

@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // The chooser is where a starter plan can quietly do the wrong thing: overwrite a weekday
 // without asking, ask when there was nothing to overwrite, or apply a plan the user cancelled.
 import React, { act } from 'react'

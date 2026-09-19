@@ -9,7 +9,7 @@
 // code path as a live instance: validate, snapshot, apply, log, revert. What is faked is the
 // provider, not the feature.
 //
-// Nothing here ships in a self-hosted bundle: every entry point is behind DEMO, which Vite
+// Nothing here ships in a self-hosted bundle: every entry point is behind DEMO, which Bun
 // replaces at build time.
 
 import { EXIDX, EXDB } from './exercises.js'

@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // Favourites (issue #6): the detail sheet's star writes S.favEx, and the picker floats
 // favourites to the top of its list without disturbing the order of everything else.
 import React, { act } from 'react'

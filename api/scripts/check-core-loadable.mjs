@@ -1,11 +1,10 @@
-#!/usr/bin/env node
-/* Does api/coach/core/ still load under plain node?
+#!/usr/bin/env bun
+/* Does api/coach/core/ still load under plain Bun / Node?
  *
- * The core is imported by two runtimes: the server under bare node, and the phone under Vite.
- * Vite forgives things node does not — `?raw`, `import.meta.glob`, JSON without an import
- * attribute — so a change made with the frontend in mind can leave vitest green and kill the
- * server at startup. mcp/scripts/check-node-loadable.mjs exists because exactly that happened
- * once. Run by bare `node` on purpose — being outside vitest IS the check.
+ * The core is imported by two runtimes: the server and the frontend client under Bun.
+ * Bundlers forgive things plain runtimes do not — `?raw`, `import.meta.glob`, JSON without an import
+ * attribute — so a change made with the frontend in mind can leave tests green and kill the
+ * server at startup. Run by bare runtime on purpose — being outside bundler environments IS the check.
  */
 import { readdirSync } from 'node:fs';
 
@@ -33,7 +32,7 @@ try {
 }
 
 if (failed) {
-  console.error(`\n${failed} module(s) do not load under plain node — the api would not start.`);
+  console.error(`\n${failed} module(s) do not load under plain runtime — the api would not start.`);
   process.exit(1);
 }
-console.log('\napi/coach/core loads under plain node.');
+console.log('\napi/coach/core loads under plain runtime.');

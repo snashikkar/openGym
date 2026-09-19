@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // The note sheet is new JSX and nothing else mounts it, so a bad hook order, a missing import or
 // a wrong store path would only surface on a real device. Render it through the real sheet stack
 // and drive a save, so the wiring is checked and not just the shape of the module.

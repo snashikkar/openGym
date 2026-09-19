@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // The session note shipped with a hole in it: buildCompletedWorkout read `active.note` and
 // nothing in the app ever wrote it, so the only way to get one was after the fact — and that
 // path threw the text away unless you happened to tab out of the field first.

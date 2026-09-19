@@ -14,10 +14,10 @@ License: AGPL-3.0-or-later.
 ```
 frontend/  React 19 + native Bun fullstack app (src/views, src/components, src/store, src/lib, src/db). Builds to static files via scripts/build.js.
            android/ + ios/ are the Capacitor shells for the standalone mobile app (docs/MOBILE.md).
-api/       backend — server.js (Node/Bun runtime, no framework), deps: @simplewebauthn/server, web-push.
-web/       multi-stage Dockerfile (builds frontend → nginx) + nginx.conf.template (serves app, proxies /api).
+api/       backend — server.js (native Bun runtime, no framework), deps: @simplewebauthn/server, web-push.
+web/       multi-stage Dockerfile (builds frontend via Bun → nginx) + nginx.conf.template (serves app, proxies /api).
 mcp/       optional MCP server — read-only stdio bridge exposing a user's workouts/1RM/muscle
-           balance to LLM clients (Claude Desktop, Cursor…). Not part of the Docker build; only
+           balance to LLM clients (Claude Desktop, Cursor…). Spawns under native Bun. Not part of the Docker build; only
            runs when an LLM client spawns it.
 media/     exercise img/gif, gitignored, fetched at runtime by the `media` compose service.
 website/   static marketing site (plain HTML/CSS/JS), deployed separately by .gitlab-ci.yml.
@@ -45,17 +45,17 @@ bun run --filter opengym-mcp test    # MCP server tests
 
 # Production build (native Bun.build)
 bun run build                        # compiles frontend into frontend/dist (sub-100ms)
-bun run build:mobile                 # VITE_MOBILE build + cap sync into android/ and ios/
+bun run build:mobile                 # MOBILE=1 build + cap sync into android/ and ios/
 ```
 
 There is no linter/formatter configured (no ESLint/Prettier config in the repo) and no
 TypeScript — match the existing style by hand.
 
 The CI gate is `.gitlab-ci.yml` on GitLab, the canonical remote (see README): it runs the
-`frontend/` tests on Node 22 — the same version as `web/Dockerfile` / `api/Dockerfile`
-(`node:22-alpine`) — and additionally builds and publishes the Docker images, packages the
+tests on native Bun (`oven/bun:1-alpine`) — matching `web/Dockerfile` and `api/Dockerfile`
+— and additionally builds and publishes the Docker images, packages the
 signed Android APK, and deploys the demo/docs site. The Gitea and GitHub workflow copies
-(`.gitea/workflows/`, `.github/workflows/`) are dormant mirrors; neither host runs them.
+(`.gitea/workflows/`, `.github/workflows/`) are mirrors.
 
 ## Architecture
 

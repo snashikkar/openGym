@@ -1,15 +1,14 @@
-#!/usr/bin/env node
-/* Does the server's import graph still load under plain node?
+#!/usr/bin/env bun
+/* Does the server's import graph still load under plain Bun / Node?
  *
- * This exists because the test suite cannot answer that question. `npm test` runs vitest, and
- * vitest resolves modules through Vite — `import.meta.glob`, `?raw`, a stray `.jsx` import all
- * work there. The server does not run under Vite. So a Vite-only import can land in a shared
- * lib module, leave all 33 tests green, and still kill the server at startup. That is exactly
- * what happened once: `history.js` began importing `t` from `i18n.js` (import.meta.glob over
- * the locale packs, plus React), and the server died on `import` with the suite none the wiser.
+ * This exists because bundler runtimes resolve modules differently than plain runtimes —
+ * `import.meta.glob`, `?raw`, or a stray `.jsx` import all work in the frontend bundler.
+ * The server does not run under a bundler. So a client-only import can land in a shared
+ * lib module and still kill the server at startup. That is exactly what happened once:
+ * `history.js` began importing `t` from `i18n.js` (import.meta.glob over the locale packs,
+ * plus React), and the server died on `import`.
  *
- * Run by bare `node` on purpose — being outside vitest IS the check. Do not port this to a
- * vitest test file; that would make it pass unconditionally.
+ * Run by bare runtime on purpose — being outside a bundler environment IS the check.
  *
  * Importing the two entry modules is enough on its own: everything the server touches hangs off
  * them, so a lib module that grows a browser-only dependency next year fails here without this
@@ -49,7 +48,7 @@ for (const entry of ['../src/state.js', '../src/tools.js']) {
 }
 
 if (failed) {
-  console.error(`\n${failed} module(s) do not load under plain node — the MCP server would not start.`)
+  console.error(`\n${failed} module(s) do not load under plain runtime — the MCP server would not start.`)
   process.exit(1)
 }
-console.log('\nthe whole MCP import graph loads under plain node.')
+console.log('\nthe whole MCP import graph loads under plain runtime.')

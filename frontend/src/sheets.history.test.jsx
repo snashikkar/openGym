@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // The history sheet (issue #43) is the one place the workout screen answers "what did I do
 // on this last time, and the time before" — worth pinning that it reads the log newest
 // first, labels sets the way the rest of the app does, and does not pretend an exercise

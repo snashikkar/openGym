@@ -128,10 +128,10 @@ export function matchesExerciseSearch(exercise, query) {
 // Media normally sits next to the app (img/ and gif/, mounted into the web container).
 // A build can point them somewhere else — the demo build pulls them off a CDN instead of
 // shipping ~140 MB of images into the deployment. `import.meta.env` is undefined in plain
-// Node; the guard keeps this module loadable without Vite.
+// Node; the guard keeps this module loadable in non-bundled environments (Node/Bun).
 const ENV = import.meta.env || {}
-const IMG_BASE = ENV.VITE_IMG_BASE || 'img/'
-const GIF_BASE = ENV.VITE_GIF_BASE || 'gif/'
+const IMG_BASE = ENV.IMG_BASE || ENV.VITE_IMG_BASE || 'img/'
+const GIF_BASE = ENV.GIF_BASE || ENV.VITE_GIF_BASE || 'gif/'
 export const imgSrc = ex => IMG_BASE + ex.img
 export const gifSrc = ex => GIF_BASE + ex.gif
 

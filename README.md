@@ -132,7 +132,7 @@ the exercise media (~140 MB) once.
 The prebuilt images are published twice, from the same tag: `registry.gitlab.com/duartesantos8/opengym/{api,web}`
 (what `docker-compose.yml` pulls) and `ghcr.io/duartesantos8/opengym-{api,web}` on GitHub — swap the
 `image:` lines if you prefer GHCR. Prefer building the images yourself instead of pulling from a
-registry? Drop the `pull` step and run `docker compose up -d --build` — you don't need Node or
+registry? Drop the `pull` step and run `docker compose up -d --build` — you don't need Bun or
 a build step locally either way.
 
 > Want it reachable from your phone over the internet with passkeys? You'll need an HTTPS
@@ -160,18 +160,18 @@ mobile app is the install-and-done flavor.
 ┌─────────────┐        ┌──────────────────────────────┐
 │  Your phone │──HTTPS─▶│  web  (nginx)                │
 │  / laptop   │        │   ├─ serves the built app    │
-└─────────────┘        │   └─ proxies /api ──────────┐│
-                       └──────────────────────────────┘│
+│  / laptop   │        │   └─ proxies /api ──────────┐│
+└─────────────┘        └──────────────────────────────┘│
                                                         ▼
                                         ┌──────────────────────────┐
-                                        │  api  (Node + WebAuthn)  │
+                                        │  api  (Bun + WebAuthn)   │
                                         │   └─ ./data (JSON files) │
                                         └──────────────────────────┘
 ```
 
 - **frontend/** — React 19 + native Bun fullstack (React Router, Zustand, Dexie.js IndexedDB), built to static files **inside Docker** (or via `bun run build`)
-- **api/** — Node with no framework, two dependencies (`@simplewebauthn/server` for passkeys, `web-push` for notifications), storing everything as plain JSON files under `./data`
-- **web/** — a multi-stage image that builds the frontend and serves it with nginx, proxying `/api` to the backend so it's all on **one origin** (passkeys require this)
+- **api/** — native Bun with no framework, two dependencies (`@simplewebauthn/server` for passkeys, `web-push` for notifications), storing everything as plain JSON files under `./data`
+- **web/** — a multi-stage image that builds the frontend with Bun and serves it with nginx, proxying `/api` to the backend so it's all on **one origin** (passkeys require this)
 
 The full HTTP API is documented as an OpenAPI spec in [`api/openapi.yaml`](api/openapi.yaml) — browsable at [opengym.duarte-santos.ch/api.html](https://opengym.duarte-santos.ch/api.html).
 
@@ -224,7 +224,7 @@ trainer role, MCP write), the iOS app, the Android and health items, and what al
 
 ## Tech
 
-React 19 + native Bun (React Router, Zustand, Dexie.js IndexedDB) · Bun/Node backend (no framework) · nginx · Docker Compose ·
+React 19 + native Bun (React Router, Zustand, Dexie.js IndexedDB) · Bun backend (no framework) · nginx · Docker Compose ·
 WebAuthn · exercise data from [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset)
 (MIT metadata and instructions; media © Gym visual — see [License](#license)).
 No database server, no cloud dependencies — the frontend builds natively with Bun (`bun run build`), so self-hosting
@@ -238,7 +238,7 @@ React, the router, Zustand, and Dexie.js.
 The optional AI Coach (`api/coach/`) is built the same way round: a by-name allowlist decides
 what may leave the server, and a closed-list validator decides what may come back — the model
 can touch routines and the weekly schedule, nothing else, and every change is applied on the
-client only after you approve it. The core of it — `api/coach/core/` — has no Node dependency,
+client only after you approve it. The core of it — `api/coach/core/` — has no platform runtime dependency,
 so the phone app runs the same validator the server does. The in-container AI runtimes live in a
 separate Docker build target; the API-key providers need none. See [docs/AI_COACH.md](docs/AI_COACH.md).
 

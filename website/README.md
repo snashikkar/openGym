@@ -12,7 +12,7 @@ Not in this folder (added at deploy time):
   icons the PWA uses, so the browser tab, home screen and app all match)
 - `openGym.apk` — the signed release build (see `../docs/MOBILE.md`)
 - `demo/` — the browser-only demo build of the app, embedded in the `#demo` section and
-  reachable on its own at `/demo/`. Built from `../frontend` with `VITE_DEMO=1` and the
+  reachable on its own at `/demo/`. Built from `../frontend` with `DEMO=1` (or `VITE_DEMO=1`) and the
   jsDelivr media bases (see the `pages` job in `../.gitlab-ci.yml`), so the ~140 MB
   of exercise media stays out of it. It has to live on this host: the site frames it, and
   `X-Frame-Options: SAMEORIGIN` would block it from anywhere else.
@@ -34,7 +34,7 @@ Every page starts with a "Skip to content" link (`.skip`, visible on focus) that
 targets `<main id="main">`. Screenshots change under the same file name, and nginx
 caches images for seven days — bump the name if a new one must show up at once.
 
-`api.html` is the one **generated** file in here: `node scripts/build-api-docs.mjs`
+`api.html` is the one **generated** file in here: `bun scripts/build-api-docs.mjs`
 rewrites it from `../api/openapi.yaml`. Edit the spec, re-run the script, commit both —
 never hand-edit `api.html`, the next run overwrites it. The page is static HTML in this
 site's own design (no Swagger UI, nothing rendered at view time); the only script of its

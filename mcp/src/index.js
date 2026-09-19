@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 /* openGym MCP server — stdio transport. The LLM client (Claude Desktop, Cursor, …) spawns
    this process locally, talks JSON-RPC over stdin/stdout, tears it down when the session ends.
    No extra container, no new outbound network — your data stays in a folder you control. */

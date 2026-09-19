@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 
 /* Signed in, the server's profile is the truth: sign-in adopts it whatever the timestamps say,
    asking only about entries the device logged while signed out; the store polls the revision

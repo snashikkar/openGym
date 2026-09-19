@@ -25,7 +25,7 @@ Add translations in small, reviewable batches. Every translated exercise must
 preserve the English instruction-step count. Then regenerate the runtime pack:
 
 ```sh
-node scripts/build-pt-br-instructions.mjs
+bun scripts/build-pt-br-instructions.mjs
 ```
 
 The generator rejects unknown IDs, empty steps, mismatched step counts and

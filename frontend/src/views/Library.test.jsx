@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // Favourites (issue #6): the Library floats starred exercises to the top of the current
 // result list — after the search and body-part filters, without reordering the rest.
 import React, { act } from 'react'

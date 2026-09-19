@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // /api/config is what tells a client whether the server offers the Coach (and guest mode).
 // loadConfig() caches it for a boot; refreshConfig() always asks — the Coach setup screen on a
 // paired phone relies on that, because the admin may have switched the Coach on since boot.

@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // Home and Plan both offer the starter plan to someone who has no routines yet. Both used to
 // wire the button straight to the loader, which quietly handed the click event in as the plan
 // id and loaded nothing at all — so both entry points are pinned here.

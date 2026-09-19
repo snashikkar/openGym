@@ -18,7 +18,7 @@ docker compose up -d
 - First start downloads the exercise images/GIFs (~140 MB) once into `media/img` and `media/gif`.
 - Open **http://localhost:8080** and create a profile with a passkey.
 - Rather build from source than pull prebuilt images? Skip `docker compose pull` and run
-  `docker compose up -d --build` instead — no Node needed locally either way.
+  `docker compose up -d --build` instead — no Bun or build tools needed locally either way.
 
 Check it's healthy:
 

@@ -1,5 +1,3 @@
-// @vitest-environment happy-dom
-// @vitest-environment happy-dom
 
 // moveGymCard backs the on-card ◀ ▶ reorder buttons: it moves the card at `from` to index `to`,
 // returning a new array. These tests cover that contract — a move is a splice, the input is never

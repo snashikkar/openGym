@@ -73,8 +73,8 @@ in the thread; there's no objection, and no request to sit on it indefinitely.
   have stopped is still worth reporting.
 - Instances served over plain `http://` on a LAN IP. Unsupported: passkeys don't work there and
   the session cookie isn't marked `Secure`.
-- Scanner output with no working exploit, and `npm audit` findings in build-time
-  devDependencies (Vite, Vitest, Capacitor CLI) that never reach a running instance.
+- Scanner output with no working exploit, and audit findings in build-time
+  devDependencies (Bun toolchain, Capacitor CLI) that never reach a running instance.
 - The GitLab Pages demo build — it has no backend at all, everything stays in that browser.
 - Third-party content: the exercise image/GIF dataset and the CDN it's fetched from.
 
@@ -208,4 +208,4 @@ Read this before hosting openGym for anyone other than yourself.
   and will fail verification against the new one. The data stays on disk but is unreachable until
   each user registers again — as a *new* profile. Choose your hostname before anyone registers.
 - **Guest mode never reaches the backend.** That data lives unencrypted in the browser's
-  `localStorage` and is gone when the browser storage is cleared.
+  client storage (Dexie.js IndexedDB) and is gone when the browser storage is cleared.

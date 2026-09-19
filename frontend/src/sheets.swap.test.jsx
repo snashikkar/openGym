@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 import { LANGS, DERIVED_LOCALES } from './lib/i18n-core.js'
 import { getLocalePacks } from './lib/test-locales.js'
 import { act } from 'react'

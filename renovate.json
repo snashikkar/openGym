@@ -35,7 +35,7 @@
   ],
   "packageRules": [
     {
-      "description": "Frontend routine bumps arrive as one MR. Runtime and build tooling move together anyway (a Vite bump usually wants its plugin bumped), and splitting them doubles the review without splitting the risk.",
+      "description": "Frontend routine bumps arrive as one MR. Runtime and build tooling move together anyway, and splitting them doubles the review without splitting the risk.",
       "matchManagers": [
         "npm"
       ],

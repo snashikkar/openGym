@@ -6,9 +6,9 @@
 
 ### Checklist
 
-- [ ] `npm test` passes in `frontend/` (and in `mcp/` if you touched it)
-- [ ] `npm run build` succeeds
-- [ ] User-facing strings are in every locale pack — `node scripts/check-locales.mjs`
+- [ ] `bun test` passes across workspaces (frontend, api, mcp)
+- [ ] `bun run build` succeeds
+- [ ] User-facing strings are in every locale pack — `bun scripts/check-locales.mjs`
 - [ ] No new runtime dependency, or the MR explains why one is unavoidable
 - [ ] CHANGELOG.md is left alone — release notes are written at release time
 

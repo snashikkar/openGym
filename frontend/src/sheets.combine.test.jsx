@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 import { act } from 'react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { beginWorkout } from './sheets.jsx'

@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 import React, { act } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createRoot } from 'react-dom/client'

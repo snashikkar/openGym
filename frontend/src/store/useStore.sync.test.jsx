@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 
 /* Two devices, one account: the server refuses a push over a document this device never saw
    (409 with the current copy), the store merges and pushes again; a pull adopts, pushes or

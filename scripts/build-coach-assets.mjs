@@ -18,7 +18,7 @@
  * quadruple a payload the model has no use for.
  *
  * The prompts are generated for a different reason: the server runs under bare node and the
- * phone under Vite, and neither `fs.readFileSync` nor a `?raw` import works in both. A plain
+ * phone under Bun/Capacitor, and neither `fs.readFileSync` nor a `?raw` import works in both. A plain
  * ES module does. The .md files stay the thing you edit.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';

@@ -2,7 +2,7 @@
 
 openGym ships in two flavors from the same codebase:
 
-| | **Self-hosted** (this repo's default) | **Mobile app** (`VITE_MOBILE=1`) |
+| | **Self-hosted** (this repo's default) | **Mobile app** (`MOBILE=1`) |
 |---|---|---|
 | Runs | in any browser, against your own server | natively on iPhone / Android (Capacitor shell) |
 | Accounts | passkey sign-in, one profile per person | none — the phone *is* the account |
@@ -42,7 +42,7 @@ or Settings → **"Connect to my server"** later) to finish. Notes:
 
 ## Prerequisites
 
-- Node 20+ / Bun 1.2+
+- Bun 1.2+ (or Node 20+)
 - **Android:** Android Studio (bundles the SDK). Java 21 for Gradle.
 - **iOS:** a Mac with Xcode 15+ and CocoaPods (`brew install cocoapods`). A free Apple ID
   is enough to run the app on your own iPhone (see below); paid membership is only needed
@@ -53,10 +53,10 @@ or Settings → **"Connect to my server"** later) to finish. Notes:
 ```sh
 cd frontend
 bun install
-bun run build:mobile        # VITE_MOBILE build + `cap sync` into android/ and ios/
+bun run build:mobile        # MOBILE=1 build + `cap sync` into android/ and ios/
 
-npx cap open android        # opens Android Studio → run on emulator or device
-npx cap open ios            # opens Xcode (Mac only) → set your signing team, then run
+bunx cap open android       # opens Android Studio → run on emulator or device
+bunx cap open ios           # opens Xcode (Mac only) → set your signing team, then run
 ```
 
 `bun run build:mobile` bakes the CDN media base into the bundle and copies the web build
@@ -142,7 +142,7 @@ same mobile bundle, `xcodebuild archive` without a signing identity, and an *uns
 registry — for AltStore/Sideloadly users to sign with their own Apple ID. It needs a Mac: Xcode
 does not run on the Linux project runner, and gitlab.com's hosted macOS runners are not on the
 free tier. To switch it on, register a Mac as a project runner (shell executor; Xcode, CocoaPods
-and Node installed; give it a tag such as `macos`) and set the CI/CD variable `IOS_RUNNER_TAG`
+and Bun/Node installed; give it a tag such as `macos`) and set the CI/CD variable `IOS_RUNNER_TAG`
 to that tag — the job then appears in every `main` and tag pipeline. Until that variable exists
 the job is not part of any pipeline, and it has not run yet, so expect a first round of fixes.
 A signed build (TestFlight, App Store) would additionally need an Apple Developer Program

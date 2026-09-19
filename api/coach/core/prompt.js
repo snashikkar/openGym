@@ -1,6 +1,6 @@
 /* Prompt assembly. The editable source is api/coach/prompts/*.md; `prompts.js` next to this
  * file is generated from it (scripts/build-coach-assets.mjs) so the same text is importable by
- * the server under bare node and by the phone under Vite, with neither reading a file. */
+ * the server under bare node and by the mobile client under Bun, with neither reading a file. */
 import { PROMPTS } from './prompts.js';
 
 export const taskOf = (kind, payload) =>

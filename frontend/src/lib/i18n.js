@@ -15,7 +15,7 @@ export {
   getLang, dateLocale, t, instrFor, exerciseNameFor, exerciseNameSearchText
 }
 
-// Vite code-splits locale, instruction and exercise-name packs via import.meta.glob. They are
+// The bundler code-splits locale, instruction and exercise-name packs via import.meta.glob. They are
 // lazy, so the production bundle ships English only until another language is selected.
 const hasGlob = typeof import.meta.glob === 'function'
 const localePacks = hasGlob ? import.meta.glob('../locales/*.js') : {}

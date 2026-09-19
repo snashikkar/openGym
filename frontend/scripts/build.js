@@ -27,10 +27,24 @@ const buildResult = await Bun.build({
   minify: true,
   define: {
     __APP_VERSION__: JSON.stringify(pkgVersion),
-    'import.meta.env.VITE_MOBILE': JSON.stringify(process.env.VITE_MOBILE || ''),
-    'import.meta.env.VITE_IMG_BASE': JSON.stringify(process.env.VITE_IMG_BASE || ''),
-    'import.meta.env.VITE_GIF_BASE': JSON.stringify(process.env.VITE_GIF_BASE || ''),
-    'import.meta.env.VITE_DEMO': JSON.stringify(process.env.VITE_DEMO || ''),
+    'import.meta.env': JSON.stringify({
+      MOBILE: process.env.MOBILE || process.env.VITE_MOBILE || '',
+      VITE_MOBILE: process.env.MOBILE || process.env.VITE_MOBILE || '',
+      IMG_BASE: process.env.IMG_BASE || process.env.VITE_IMG_BASE || '',
+      VITE_IMG_BASE: process.env.IMG_BASE || process.env.VITE_IMG_BASE || '',
+      GIF_BASE: process.env.GIF_BASE || process.env.VITE_GIF_BASE || '',
+      VITE_GIF_BASE: process.env.GIF_BASE || process.env.VITE_GIF_BASE || '',
+      DEMO: process.env.DEMO || process.env.VITE_DEMO || '',
+      VITE_DEMO: process.env.DEMO || process.env.VITE_DEMO || '',
+    }),
+    'import.meta.env.MOBILE': JSON.stringify(process.env.MOBILE || process.env.VITE_MOBILE || ''),
+    'import.meta.env.VITE_MOBILE': JSON.stringify(process.env.MOBILE || process.env.VITE_MOBILE || ''),
+    'import.meta.env.IMG_BASE': JSON.stringify(process.env.IMG_BASE || process.env.VITE_IMG_BASE || ''),
+    'import.meta.env.VITE_IMG_BASE': JSON.stringify(process.env.IMG_BASE || process.env.VITE_IMG_BASE || ''),
+    'import.meta.env.GIF_BASE': JSON.stringify(process.env.GIF_BASE || process.env.VITE_GIF_BASE || ''),
+    'import.meta.env.VITE_GIF_BASE': JSON.stringify(process.env.GIF_BASE || process.env.VITE_GIF_BASE || ''),
+    'import.meta.env.DEMO': JSON.stringify(process.env.DEMO || process.env.VITE_DEMO || ''),
+    'import.meta.env.VITE_DEMO': JSON.stringify(process.env.DEMO || process.env.VITE_DEMO || ''),
   }
 });
 

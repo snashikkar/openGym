@@ -134,7 +134,7 @@ forcing a real-time countdown added friction without adding value; the short res
 is self-timed.
 
 **Testing gotcha, not a code bug:** `S.active` (the in-progress workout) and each routine's saved
-`intensifier` config both live in `localStorage` and are untouched by redeploying the container.
+`intensifier` config both live in client persistence (Dexie IndexedDB / `useStore`) and are untouched by redeploying the container.
 Iterating on this feature while an old workout is still active, or without re-saving an
 already-configured exercise, replays stale pre-`totalReps` data. Discard the active workout and
 re-save the exercise's config after a schema change like this one.

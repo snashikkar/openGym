@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { checkForUpdate, sha256, resetUpdateCheck } from './update.js'
 
-// __APP_VERSION__ is defined at build time by vite.config.js (reads package.json).
-// In the test environment vitest applies the same define, so it's available here.
+// __APP_VERSION__ is defined at build time by frontend/scripts/build.js (reads package.json).
+// In the test environment test/setup.js applies the same define, so it's available here.
 
 describe('sha256', () => {
   it('computes the correct hash for a known input', async () => {

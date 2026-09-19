@@ -19,3 +19,20 @@ if (globalThis.window) {
   globalThis.window.IDBTransaction = globalThis.IDBTransaction;
   globalThis.window.IDBDatabase = globalThis.IDBDatabase;
 }
+
+if (typeof globalThis.__APP_VERSION__ === 'undefined') {
+  globalThis.__APP_VERSION__ = '1.3.7';
+}
+
+if (typeof import.meta.env === 'undefined') {
+  import.meta.env = {
+    MOBILE: '',
+    VITE_MOBILE: '',
+    IMG_BASE: '',
+    VITE_IMG_BASE: '',
+    GIF_BASE: '',
+    VITE_GIF_BASE: '',
+    DEMO: '',
+    VITE_DEMO: ''
+  };
+}

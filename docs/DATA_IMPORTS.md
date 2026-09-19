@@ -50,7 +50,7 @@ If you have **Hevy Pro**, you can skip the CSV and import straight from Hevy:
 Both the API import and a detected **Hevy CSV** resolve exercises through the same generated
 lookup (`frontend/src/lib/hevy-id-map.js`): template id for the API, English title for the CSV.
 To regenerate (developers): set `HEVY_API_KEY` in the environment or `.env`, then run
-`node scripts/build-hevy-id-map.mjs`. Unmapped lifts become your own exercises. Workout days
+`bun scripts/build-hevy-id-map.mjs`. Unmapped lifts become your own exercises. Workout days
 that already have data here are left alone; routines are always added as **new** plans
 (nothing you already have is overwritten). Localized CSV titles (non-English) still fall back
 to name matching.

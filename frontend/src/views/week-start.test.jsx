@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // The setting is only worth anything if the screens actually follow it: the toggle has to
 // write the field, and the Plan list has to draw the week in that order.
 import React, { act } from 'react'

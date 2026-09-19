@@ -82,7 +82,7 @@ vi.mock('../sheets.jsx', () => ({
 }))
 vi.mock('../components/Media.jsx', () => ({ default: () => null }))
 // api.js reads navigator.userAgent at module scope. This file installs its own DOM inside the
-// tests rather than declaring a vitest environment, so it must not depend on an ambient one.
+// tests, so it does not depend on an ambient one.
 vi.mock('../lib/api.js', () => ({
   api: vi.fn(() => Promise.resolve({})),
   IS_APPLE: false, IS_ANDROID: false, BIO: 'biometrics',

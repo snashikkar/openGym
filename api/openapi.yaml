@@ -1,5 +1,5 @@
 # openGym HTTP API — hand-written OpenAPI 3.1 spec.
-# Source of truth: api/server.js (a single framework-free Node file). Every route the
+# Source of truth: api/server.js (a single framework-free Bun file). Every route the
 # server registers is documented here; if you add a route there, add it here too.
 # Browsable version: https://opengym.duarte-santos.ch/api.html
 openapi: 3.1.0
@@ -10,7 +10,7 @@ info:
   summary: Passkey (WebAuthn) auth + per-user state storage for openGym
   description: |
     The backend of [openGym](https://opengym.duarte-santos.ch) — a free, open-source
-    gym & body-weight tracker. One Node file, no framework, JSON-file storage,
+    gym & body-weight tracker. One native Bun file, no framework, JSON-file storage,
     HMAC-signed session cookies.
 
     ### Authentication

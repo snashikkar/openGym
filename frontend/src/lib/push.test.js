@@ -1,5 +1,3 @@
-// @vitest-environment happy-dom
-// @vitest-environment-options { "url": "https://gym.test/" }
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const calls = []

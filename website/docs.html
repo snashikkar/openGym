@@ -450,7 +450,7 @@ docker compose up -d</code></pre>
 curl http://localhost:8080/api/health      # {"ok":true,...}</code></pre>
   <p>Logs: <code>docker compose logs -f</code> · stop: <code>docker compose down</code> ·
      build from source instead of pulling: skip the <code>pull</code> and run
-     <code>docker compose up -d --build</code> — no Node needed locally either way.</p>
+     <code>docker compose up -d --build</code> — no Bun or build tools needed locally either way.</p>
 
   <h3 id="sh-passkey">The passkey rule (read this before opening a port)</h3>
   <p>openGym signs you in with <b>passkeys</b> (WebAuthn — Face ID, fingerprint, or your
@@ -565,7 +565,7 @@ docker compose up -d</code></pre>
   <p>Two things that look like settings but aren't: <code>DATA_DIR</code> is pinned to
      <code>/data</code> by <code>docker-compose.yml</code> and mapped to <code>./data</code> —
      change the host side of that volume, not the variable. And
-     <code>VITE_IMG_BASE</code>/<code>VITE_GIF_BASE</code> are <b>build-time</b> values baked
+     <code>IMG_BASE</code>/<code>GIF_BASE</code> (or legacy <code>VITE_IMG_BASE</code>/<code>VITE_GIF_BASE</code>) are <b>build-time</b> values baked
      into the frontend bundle — setting them next to <code>docker compose</code> does nothing
      to a prebuilt image (see <a href="#troubleshoot">Troubleshooting</a>).</p>
 
@@ -729,7 +729,7 @@ ALLOW_GUEST=0              # remove "Continue without account"</code></pre>
   </table>
   <p>It is <b>not part of the Docker build</b> — if you don't use an AI assistant, it simply
      isn't there. No new auth (the filesystem is the boundary), no telemetry, no network; the
-     LLM never sees passkeys or session secrets. Setup is <code>cd mcp &amp;&amp; npm
+     LLM never sees passkeys or session secrets. Setup is <code>cd mcp &amp;&amp; bun
      install</code> plus a few lines of client config:
      <a href="https://github.com/DuarteSantos8/openGym/blob/main/mcp/README.md" rel="noopener">mcp/README.md</a>.</p>
 
@@ -804,13 +804,13 @@ Leg Day,Leg Press,2026-08-21,200,1</code></pre>
   <h2 id="arch">How it's built</h2>
   <p>Two containers, one folder, no database server:</p>
   <ul>
-    <li><b>frontend/</b> — React 19 + Vite (React Router, Zustand), built to static files
-        <i>inside Docker</i>. The app ships no runtime dependencies beyond React, the router
-        and Zustand.</li>
-    <li><b>api/</b> — Node with <b>no framework</b> and two dependencies
+    <li><b>frontend/</b> — React 19 + native Bun (React Router, Zustand, Dexie.js IndexedDB), built to static files
+        <i>inside Docker</i>. The app ships no runtime dependencies beyond React, the router,
+        Zustand, and Dexie.js.</li>
+    <li><b>api/</b> — native Bun runtime with <b>no framework</b> and two dependencies
         (<code>@simplewebauthn/server</code> for passkeys, <code>web-push</code> for
         notifications), storing everything as plain JSON files under <code>./data</code>.</li>
-    <li><b>web/</b> — a multi-stage image that builds the frontend and serves it with nginx,
+    <li><b>web/</b> — a multi-stage image that builds the frontend with Bun and serves it with nginx,
         proxying <code>/api</code> to the backend so it's all on <b>one origin</b> (passkeys
         require this).</li>
   </ul>
@@ -831,15 +831,14 @@ Leg Day,Leg Press,2026-08-21,200,1</code></pre>
   <p>Everything on this page is built from the public repo:</p>
   <ul>
     <li><b>Web / self-host:</b> <code>docker compose up -d --build</code> builds the frontend
-        inside the container — no local Node needed.</li>
-    <li><b>Android APK:</b> <code>npm run build:mobile</code> in <code>frontend/</code>, then
+        inside the container — no local Bun or build tools needed.</li>
+    <li><b>Android APK:</b> <code>bun run build:mobile</code> in <code>frontend/</code>, then
         Gradle + <code>zipalign</code> + <code>apksigner</code> with your own keystore
         (keep it — updates must carry the same signature). Step-by-step:
         <a href="https://github.com/DuarteSantos8/openGym/blob/main/docs/MOBILE.md" rel="noopener">docs/MOBILE.md</a>.</li>
     <li><b>iOS app:</b> the Capacitor project in <code>frontend/ios</code> — open in Xcode,
         set your (free) team, run on your device. Same doc.</li>
-    <li><b>Development:</b> Node 20+; <code>npm test</code> in <code>frontend/</code>,
-        <code>api/</code> and <code>mcp/</code> runs the suites. Contributions welcome —
+    <li><b>Development:</b> Bun 1.2+; <code>bun test</code> across workspaces runs the suites. Contributions welcome —
         <a href="https://github.com/DuarteSantos8/openGym/blob/main/CONTRIBUTING.md" rel="noopener">CONTRIBUTING.md</a>.</li>
   </ul>
 
@@ -875,7 +874,7 @@ Leg Day,Leg Press,2026-08-21,200,1</code></pre>
     <tr><td>"Keep screen awake" shows as unsupported</td><td>The Wake Lock API needs HTTPS or localhost; iOS also refuses it in Low Power Mode.</td></tr>
     <tr><td>Want to reset a stuck login</td><td>Delete the cookie — sessions are just signed cookies. "Sign out everywhere" in Settings ends every session (and paired apps) at once.</td></tr>
     <tr><td><code>docker compose pull</code> says "denied"</td><td>Build from source instead: <code>docker compose up -d --build</code>.</td></tr>
-    <tr><td>Exercise images blank in an old build</td><td>Fixed in current images. <code>VITE_IMG_BASE</code>/<code>VITE_GIF_BASE</code> are <b>build-time</b>: they're baked into the bundle when the frontend compiles, so setting them at runtime does nothing to a prebuilt image — redirect media in your reverse proxy instead, or rebuild.</td></tr>
+    <tr><td>Exercise images blank in an old build</td><td>Fixed in current images. <code>IMG_BASE</code>/<code>GIF_BASE</code> (or legacy <code>VITE_IMG_BASE</code>/<code>VITE_GIF_BASE</code>) are <b>build-time</b>: they're baked into the bundle when the frontend compiles, so setting them at runtime does nothing to a prebuilt image — redirect media in your reverse proxy instead, or rebuild.</td></tr>
   </table>
   <p>Still stuck? The <a href="https://discord.gg/e62jY6fwVb" rel="noopener">Discord</a> is
      the quickest way to get an answer;

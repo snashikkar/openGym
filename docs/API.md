@@ -10,5 +10,5 @@ hand-written OpenAPI 3.1 spec:
 Lint it after changing routes:
 
 ```sh
-npx --yes @redocly/cli lint api/openapi.yaml
+bunx @redocly/cli lint api/openapi.yaml
 ```

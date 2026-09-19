@@ -1,7 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 // Builds website/api.html — the static API reference — from api/openapi.yaml.
 //
-//   node scripts/build-api-docs.mjs
+//   bun scripts/build-api-docs.mjs
 //
 // Deterministic: the same spec always produces byte-identical output (no
 // timestamps), so re-running it only dirties the file when the spec changed.
@@ -459,7 +459,7 @@ document.querySelectorAll('[data-xall]').forEach(b => b.addEventListener('click'
 const html = `<!DOCTYPE html>
 <!-- GENERATED FILE - do not edit by hand.
      Built by scripts/build-api-docs.mjs from api/openapi.yaml (openGym API v${spec.info.version}).
-     Regenerate with: node scripts/build-api-docs.mjs -->
+     Regenerate with: bun scripts/build-api-docs.mjs -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">

@@ -464,7 +464,7 @@ function csrfOk(req, key) {
   // Sec-Fetch-Site is set by the browser itself and no page can forge it, and it states exactly
   // the property wanted here — more precisely than comparing origins can. 'same-origin' is the
   // app talking to its own backend; a hostile page reports 'cross-site'; a sibling subdomain,
-  // the case SameSite=Lax misses entirely, reports 'same-site'. It is also what keeps the Vite
+  // the case SameSite=Lax misses entirely, reports 'same-site'. It is also what keeps the local
   // dev server working, where the page is on another port and its Origin is legitimately not
   // ORIGIN. Absent on older Safari and on proxies that strip it, hence the fallback below.
   const site = req.headers['sec-fetch-site'];

@@ -21,9 +21,8 @@ updates:
       interval: monthly
     open-pull-requests-limit: 3
     groups:
-      # Routine bumps arrive as one PR. Runtime and build tooling move together anyway (a Vite
-      # bump usually wants its plugin bumped), and splitting them doubles the review without
-      # splitting the risk.
+      # Routine bumps arrive as one PR. Runtime and build tooling move together anyway,
+      # and splitting them doubles the review without splitting the risk.
       frontend:
         patterns: ['*']
         update-types: ['minor', 'patch']

@@ -66,6 +66,34 @@ describe('CI Fitness & Toolchain Modernization (Slice 3 & 4 Done-When)', () => {
     expect(pkg.scripts?.['build:mobile']).not.toContain('vite');
   });
 
+  it('verifies web/Dockerfile uses native Bun and contains zero Vite remnants', () => {
+    const dockerfile = readFileSync('web/Dockerfile', 'utf8');
+    expect(dockerfile).toContain('oven/bun:1-alpine');
+    expect(dockerfile).not.toMatch(/\bvite\b/i);
+  });
+
+  it('verifies absence of @vitest-environment directives across test files', () => {
+    const { execSync } = require('node:child_process');
+    const result = execSync('git grep "@vitest-environment" frontend/src || true', { encoding: 'utf8' }).trim();
+    expect(result).toBe('');
+  });
+
+  it('verifies api/Dockerfile uses native oven/bun:1-alpine runtime', () => {
+    const dockerfile = readFileSync('api/Dockerfile', 'utf8');
+    expect(dockerfile).toContain('oven/bun:1-alpine');
+    expect(dockerfile).toContain('bun install --production');
+    expect(dockerfile).toContain('CMD ["bun", "server.js"]');
+    expect(dockerfile).not.toMatch(/\bnpm ci\b/);
+  });
+
+  it('verifies mcp/src/index.js uses native bun shebang and bun start script', () => {
+    const mcpIndex = readFileSync('mcp/src/index.js', 'utf8');
+    expect(mcpIndex.startsWith('#!/usr/bin/env bun')).toBe(true);
+
+    const mcpPkg = JSON.parse(readFileSync('mcp/package.json', 'utf8'));
+    expect(mcpPkg.scripts?.start).toBe('bun src/index.js');
+  });
+
 
   it('verifies execution occurs on native Bun runtime with unified bun.lock', () => {
     expect(process.versions?.bun).toBeDefined();

@@ -2,8 +2,8 @@
  *
  * `library-data.js` is generated from the frontend dataset and committed (see
  * scripts/build-coach-assets.mjs) — the same arrangement the translated instruction packs use.
- * It is an ES module rather than JSON on purpose: bare node needs createRequire for JSON, Vite
- * needs an import attribute, and this file has to load under both without either knowing.
+ * It is an ES module rather than JSON on purpose: bare node needs createRequire for JSON, bundlers
+ * need an import attribute, and this file has to load under both without either knowing.
  */
 import { EXERCISES } from './library-data.js';
 

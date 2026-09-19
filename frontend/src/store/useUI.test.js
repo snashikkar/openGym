@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // useUI pulls in api.js, which reads navigator.userAgent at module scope.
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest'
 import { useUI } from './useUI.js'

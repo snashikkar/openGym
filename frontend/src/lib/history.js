@@ -11,8 +11,8 @@ const workRowsForMode = (entry = {}, mode = 'reps') => {
   return (Array.isArray(source.sets) ? source.sets : [])
     .filter(set => phaseForSet(set) === 'work' && modeForSet(set, target) === expectedMode)
 }
-// i18n-core, not i18n: this file is imported by mcp/, which is plain Node with no Vite and no
-// React. i18n.js is the Vite half — import.meta.glob over the locale packs, useSyncExternalStore
+// i18n-core, not i18n: this file is imported by mcp/, which is plain Node with no bundler and no
+// React. i18n.js is the client half — import.meta.glob over the locale packs, useSyncExternalStore
 // for the hook — and it re-exports this very `t` from core, so nothing changes here except what
 // gets dragged along behind it.
 import { t } from './i18n-core.js'

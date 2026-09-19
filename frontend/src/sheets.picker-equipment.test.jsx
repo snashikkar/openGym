@@ -1,4 +1,3 @@
-// @vitest-environment happy-dom
 // Issue #71: choosing a body part after picking an equipment type used to reset the equipment
 // filter to "all equipment", even when the new muscle group still had exercises for it. The
 // per-body-part chips no longer clear the equipment selection; the eqOn fallback only drops it

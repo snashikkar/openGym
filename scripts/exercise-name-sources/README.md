@@ -14,7 +14,7 @@ imports and exports continue to use the canonical catalogue entries.
 Generate the runtime pack with:
 
 ```sh
-node scripts/build-pt-br-exercise-names.mjs
+bun scripts/build-pt-br-exercise-names.mjs
 ```
 
 The initial translations were produced from the English EXDB titles with LLM

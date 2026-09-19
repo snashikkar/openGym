@@ -23,7 +23,7 @@ The numbers it answers with are computed by the **same pure functions the React 
 
 ```bash
 cd mcp
-npm install
+bun install
 ```
 
 ### 2. Point it at your data
@@ -33,10 +33,10 @@ to answer for — its user id is in `./data/db.json` under `users[].id`:
 
 ```bash
 # single-user instance (the common self-hosted case) — auto-detected:
-node src/index.js
+bun src/index.js
 
 # multi-user instance, or just to be explicit:
-OPENGYM_UID=<your-uid> OPENGYM_DATA=/path/to/openGym/data node src/index.js
+OPENGYM_UID=<your-uid> OPENGYM_DATA=/path/to/openGym/data bun src/index.js
 ```
 
 ### 3. Register with your LLM client
@@ -48,7 +48,7 @@ Add the server to your LLM client's MCP config. For Claude Desktop, edit
 {
   "mcpServers": {
     "opengym": {
-      "command": "node",
+      "command": "bun",
       "args": ["/absolute/path/to/openGym/mcp/src/index.js"],
       "env": {
         "OPENGYM_DATA": "/absolute/path/to/openGym/data",
@@ -94,13 +94,13 @@ re-interpret them.
 
 ## How it reuses the training logic
 
-The MCP server imports the training helpers under `frontend/src/lib/` directly as Node ESM
+The MCP server imports the training helpers under `frontend/src/lib/` directly as Bun ESM
 and calls the same functions the React UI does (`history.js`, `onerm.js`, `muscles.js`,
 `exercises.js`). The numbers it returns match what the Stats screen shows, because they are
 the same code.
 
-The one lib file that wasn't Node-safe was `i18n.js` (Vite's `import.meta.glob` at module
-top level) — split into `i18n-core.js` (pure, Node-safe) + `i18n.js` (Vite/React bits,
+The one lib file that wasn't server-safe was `i18n.js` (client-side `import.meta.glob` at module
+top level) — split into `i18n-core.js` (pure, runtime-safe) + `i18n.js` (client/React bits,
 re-exports from core). `exercises.js` got a one-line `import.meta.env || {}` guard. No new
 dependencies landed in `frontend/`, no public exports changed.
 

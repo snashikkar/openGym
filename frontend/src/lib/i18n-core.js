@@ -95,7 +95,7 @@ export const exerciseNameSearchText = ex => {
 }
 
 // Called by i18n.js's setLang once the locale pack has been loaded — kept here rather than
-// exported as setLang because loading packs requires import.meta.glob, which is Vite-only.
+// exported as setLang because loading packs requires import.meta.glob, which is bundler-specific.
 // `dict`, `instr` and `exerciseNames` may be null to reset to their English fallbacks.
 export function _setLangState(newLang, newDict, newInstr, newExerciseNames) {
   lang = LANGS[newLang] ? newLang : 'en'

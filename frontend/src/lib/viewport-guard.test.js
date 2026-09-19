@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { describe, it, expect, vi } from 'vitest'
 import { installViewportGuard, realign, realignPinned, viewportDisplacement, keyboardOpen } from './viewport-guard.js'
 

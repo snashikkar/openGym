@@ -32,7 +32,7 @@ services:
         fi
     restart: "no"
 
-  # Passkey auth + per-user data (Node, no framework).
+  # Passkey auth + per-user data (Bun runtime, no framework).
   # image: prebuilt (docker compose pull). build: from source (docker compose up --build).
   api:
     image: ghcr.io/duartesantos8/opengym-api:latest

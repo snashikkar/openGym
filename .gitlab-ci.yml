@@ -215,10 +215,9 @@ test:mcp:
     - npx vitest run
         --reporter=default --reporter=junit --outputFile.junit=junit.xml
         --coverage --coverage.reporter=text-summary --coverage.reporter=cobertura
-    # The one check the vitest suite structurally cannot make. The MCP server is a bare node
-    # process, but vitest runs its tests through Vite — import.meta.glob, .jsx imports and
-    # ?raw all resolve happily there. That is how a Vite-only import reached a shared lib
-    # module with 33 green tests standing over a server that died on startup.
+    # The MCP server is a bare node process. Client-only imports (import.meta.glob,
+    # .jsx imports, ?raw) do not resolve in plain Node. check:node-loadable verifies
+    # that shared lib modules stay loadable outside the bundler.
     - npm run check:node-loadable
   coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
   artifacts:
@@ -256,8 +255,8 @@ test:api:
     # A dataset or prompt change that forgets to regenerate them would otherwise only surface as
     # "the Coach can't find that exercise" — or a prompt edit that never reached the model.
     - node scripts/build-coach-assets.mjs --check
-    # api/coach/core is imported by the server under bare node AND by the phone under Vite.
-    # vitest forgives what node does not (?raw, import.meta.glob); this runs outside vitest.
+    # api/coach/core is imported by the server under bare node AND by the mobile client under Bun.
+    # Bundlers forgive what node does not (?raw, import.meta.glob); this runs outside bundlers.
     - node api/scripts/check-core-loadable.mjs
   coverage: '/all files\s*\|\s*(\d+\.?\d*)/'
   artifacts:
@@ -789,7 +788,7 @@ verify:scan:
 # https://duartesantos8.gitlab.io/opengym/ 308s to it. Settings → Pages turns it off.)
 # Pages serves static files only, so this build has no backend — VITE_DEMO=1 makes the
 # app boot straight into guest mode with a seeded example history (frontend/src/lib/demo.js).
-# Vite's base is './', so the bundle drops into a subdirectory unchanged.
+# The build base is './', so the bundle drops into a subdirectory unchanged.
 pages:
   extends: .node
   stage: deploy
