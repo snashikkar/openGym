@@ -1,7 +1,7 @@
 /* openGym service worker — the app shell and its hashed assets are cached at install and kept
    fresh network-first, media (img/gif) cache-first. A home-screen app reopened without a network
    comes back from here with the same bundle it last ran; the state itself lives in localStorage.
-   `CACHE` carries the build hash (vite.config.js rewrites it), so every deploy is a new worker
+   `CACHE` carries the build hash (scripts/build.js rewrites it), so every deploy is a new worker
    with its own cache and the previous build's files are dropped on activate. */
 const CACHE = 'opengym-rt-__BUILD__'
 
