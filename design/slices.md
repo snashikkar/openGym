@@ -87,6 +87,26 @@ done-when:
 
 ---
 
+## Slice 5: `5-purge-vite-native-bun-fullstack` [SHIPPED]
+
+```
+slice:        5-purge-vite-native-bun-fullstack
+status:       shipped & swept
+slice-branch: slice/5-purge-vite-native-bun-fullstack
+commit:       f000e2f
+review:       ANUBIS PASS
+traceability:
+  journeys: [jrn-bun-unified-development-pipeline]
+  screens:  [scr-developer-test-dashboard]
+done-when:
+  1. Vite and @vitejs/plugin-react permanently removed from dependencies — proven by test/ci-fitness.test.js
+  2. Native Bun build script produces production bundle in frontend/dist — proven by frontend/scripts/build.js
+  3. Native Bun dev server serves fullstack app with reverse proxy — proven by frontend/scripts/dev.js
+  4. Full CI test suite passes under native Bun — proven by test/ci-fitness.test.js
+```
+
+---
+
 ## Slice Execution Order & Branch Progression
 
 ```text
@@ -101,5 +121,8 @@ trunk (tip)
                                             └── build → tests green → slice-review → slice-release → sweep
                                                   └── trunk fast-forwards
                                                         └── slice/4-complete-bun-toolchain-and-old-stack-retirement
-                                                              └── build → tests green → slice-review → slice-release → sweep → trunk
+                                                              └── build → tests green → slice-review → slice-release → sweep
+                                                                    └── trunk fast-forwards
+                                                                          └── slice/5-purge-vite-native-bun-fullstack
+                                                                                └── build → tests green → slice-review → slice-release → sweep → trunk
 ```
