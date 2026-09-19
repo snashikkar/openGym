@@ -2,6 +2,7 @@
 import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { _setMobileForTest, _setAndroidForTest } from '../lib/mobile.js'
 import Settings from './Settings.jsx'
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
@@ -44,12 +45,6 @@ vi.mock('../lib/api.js', () => ({
 }))
 vi.mock('../lib/push.js', () => ({ pushSupported: () => false, enablePush: vi.fn(), disablePush: vi.fn(), sendTestPush: vi.fn() }))
 vi.mock('../lib/wakelock.js', () => ({ wakeLockSupported: () => false }))
-// MOBILE is read at render time through a getter so one module mock serves both builds.
-vi.mock('../lib/mobile.js', () => ({
-  get MOBILE() { return mocks.MOBILE },
-  isAndroid: () => Promise.resolve(mocks.android),
-  shareExport: vi.fn(), syncReminder: vi.fn(),
-}))
 vi.mock('../lib/update.js', () => ({
   checkForUpdate: (...a) => mocks.checkForUpdate(...a),
   downloadAndInstall: vi.fn(),
@@ -68,8 +63,8 @@ beforeEach(() => {
     unit: 'kg', restSec: 90, restPauseSec: 15, sound: false, effort: 'none',
     gifSize: 'full', workouts: [], routines: [], exWeights: {},
   }
-  mocks.MOBILE = false
-  mocks.android = false
+  _setMobileForTest(false)
+  _setAndroidForTest(false)
   mocks.checkForUpdate.mockClear()
   mocks.confirmSheet.mockClear()
   host = document.createElement('div')
@@ -79,6 +74,8 @@ beforeEach(() => {
 afterEach(() => {
   act(() => root.unmount())
   host.remove()
+  _setMobileForTest(false)
+  _setAndroidForTest(null)
 })
 
 // The effect resolves two promises (isAndroid, then checkForUpdate) before the row can render.
@@ -100,7 +97,8 @@ describe('Settings — in-app update check', () => {
   })
 
   it('mobile build on iOS: no check, no row, no section', async () => {
-    mocks.MOBILE = true
+    _setMobileForTest(true)
+    _setAndroidForTest(false)
     await mount()
     expect(mocks.checkForUpdate).not.toHaveBeenCalled()
     expect(updateRow()).toBeUndefined()
@@ -109,8 +107,8 @@ describe('Settings — in-app update check', () => {
   })
 
   it('mobile build on Android: checks once and shows the row, tapping it asks before downloading', async () => {
-    mocks.MOBILE = true
-    mocks.android = true
+    _setMobileForTest(true)
+    _setAndroidForTest(true)
     await mount()
     expect(mocks.checkForUpdate).toHaveBeenCalledTimes(1)
     expect(updateRow()).toBeTruthy()
@@ -120,8 +118,8 @@ describe('Settings — in-app update check', () => {
   })
 
   it('Android without a newer release: a "Check for updates" row stays, and tapping it checks again', async () => {
-    mocks.MOBILE = true
-    mocks.android = true
+    _setMobileForTest(true)
+    _setAndroidForTest(true)
     mocks.checkForUpdate.mockResolvedValueOnce({ hasUpdate: false, latestVersion: 'test', apkUrl: null, hashUrl: null })
     await mount()
     expect(mocks.checkForUpdate).toHaveBeenCalledTimes(1)
@@ -134,8 +132,8 @@ describe('Settings — in-app update check', () => {
   })
 
   it('Android when gitlab.com is unreachable: stays quiet, keeps the row', async () => {
-    mocks.MOBILE = true
-    mocks.android = true
+    _setMobileForTest(true)
+    _setAndroidForTest(true)
     mocks.checkForUpdate.mockRejectedValueOnce(new Error('offline'))
     await mount()
     expect(updateRow()).toBeUndefined()

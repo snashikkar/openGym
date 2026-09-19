@@ -66,8 +66,12 @@ describe('active workout whole-unit order', () => {
   })
 })
 
+import { getLocalePacks } from './test-locales.js'
+
 describe('active workout move locale coverage', () => {
-  const packs = import.meta.glob('../locales/*.js', { eager: true, import: 'default' })
+  const packs = typeof import.meta.glob === 'function'
+    ? import.meta.glob('../locales/*.js', { eager: true, import: 'default' })
+    : getLocalePacks('../locales', import.meta.url)
   // English is the source language and has no pack. Derived locales (de-CH) have none either:
   // they transform their base language's pack at load time, and are checked separately below.
   const localeCodes = Object.keys(LANGS).filter(code => code !== 'en' && !DERIVED_LOCALES[code])

@@ -106,7 +106,8 @@ export {
   checkSet,
   finishWorkoutSession,
   editPastWorkout,
-  queryActiveWorkout
+  queryActiveWorkout,
+  syncActiveWorkoutToDexie
 } from './workout-operations.js';
 export {
   createRoutine,

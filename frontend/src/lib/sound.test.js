@@ -43,6 +43,7 @@ beforeEach(async () => {
   setDevice(IPHONE)
   vi.resetModules()
   sound = await import('./sound.js')
+  sound._resetAudioContext?.()
 })
 afterEach(() => { vi.useRealTimers() })
 

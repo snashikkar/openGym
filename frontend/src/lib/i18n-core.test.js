@@ -83,13 +83,23 @@ describe('de-CH as a selectable language', () => {
     _setLangState('en', {}, null, null)
   })
 
-  it('ships no locale pack of its own, so nothing can shadow the derivation', () => {
-    const packs = import.meta.glob('../locales/*.js', { eager: true, import: 'default' })
-    for (const code of Object.keys(DERIVED_LOCALES)) {
-      expect(packs[`../locales/${code}.js`], `${code} is derived and must not have a pack`).toBeUndefined()
+  it('ships no locale pack of its own, so nothing can shadow the derivation', async () => {
+    if (typeof import.meta.glob === 'function') {
+      const packs = import.meta.glob('../locales/*.js', { eager: true, import: 'default' })
+      for (const code of Object.keys(DERIVED_LOCALES)) {
+        expect(packs[`../locales/${code}.js`], `${code} is derived and must not have a pack`).toBeUndefined()
+      }
+      expect(packs['../locales/de.js']).toBeTruthy()
+      return
     }
-    // Control: a language that is not derived does have one.
-    expect(packs['../locales/de.js']).toBeTruthy()
+    const { readdirSync } = await import('node:fs')
+    const { fileURLToPath } = await import('node:url')
+    const localeDir = fileURLToPath(new URL('../locales', import.meta.url))
+    const diskPacks = readdirSync(localeDir)
+    for (const code of Object.keys(DERIVED_LOCALES)) {
+      expect(diskPacks.includes(`${code}.js`), `${code} is derived and must not have a pack`).toBe(false)
+    }
+    expect(diskPacks.includes('de.js')).toBe(true)
   })
 
   it('declares de as its base, not the other way round', () => {

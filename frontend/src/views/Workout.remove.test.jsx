@@ -7,6 +7,7 @@ import Workout, { removeActiveExercise } from './Workout.jsx'
 import { DEF, useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
 import { LANGS, DERIVED_LOCALES } from '../lib/i18n-core.js'
+import { getLocalePacks } from '../lib/test-locales.js'
 
 vi.mock('../lib/sound.js', () => ({ beep: vi.fn(), vibrate: vi.fn(), unlock: vi.fn() }))
 vi.mock('../lib/api.js', () => ({ api: vi.fn(() => Promise.resolve({})) }))
@@ -204,7 +205,9 @@ describe('remove-exercise locale coverage', () => {
     'Remove',
     'Which exercise in this superset do you want to remove?'
   ]
-  const packs = import.meta.glob('../locales/*.js', { eager: true, import: 'default' })
+  const packs = typeof import.meta.glob === 'function'
+    ? import.meta.glob('../locales/*.js', { eager: true, import: 'default' })
+    : getLocalePacks('../locales', import.meta.url)
   // Every non-English language has its own pack (English is the source, so it has none),
   // except a derived locale such as de-CH, which transforms its base language's pack at load
   // time — computed from LANGS rather than hardcoded so adding a language doesn't silently
@@ -215,7 +218,7 @@ describe('remove-exercise locale coverage', () => {
   it('defines every new prompt in every non-English locale pack', () => {
     expect(Object.keys(packs)).toHaveLength(nonEnglishLangCount)
     Object.entries(packs).forEach(([path, pack]) => {
-      required.forEach(key => expect(pack, `${path} is missing ${key}`).toHaveProperty(key))
+      required.forEach(key => expect(Object.hasOwn(pack, key), `${path} is missing ${key}`).toBe(true))
     })
   })
 })

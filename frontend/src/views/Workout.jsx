@@ -21,6 +21,7 @@ import { progressionGuidance } from '../lib/progression-copy.js'
 import { glyphOf } from '../lib/glyphs.js'
 import { isWarmupRow, isDropSet, isRestPauseSet, dropsOf, clustersOf, addDrop, addCluster, removeDropAt, removeClusterAt, setDropAt, setClusterAt, nextDropWeight, nextBurstReps, isSideSet, makeSideSet, setSideField, toggleSide, addSideDrop, removeSideDropAt, setSideDropAt, addSideCluster, removeSideClusterAt, setSideClusterAt } from '../lib/workout-model.js'
 import { canMoveActiveWorkoutUnit, moveActiveWorkoutUnit } from '../lib/active-workout-order.js'
+import { db, checkSet, queryActiveWorkout, useLiveQuery } from '../db/index.js'
 
 const SWIPE_MIN_DISTANCE = 48
 const SWIPE_AXIS_RATIO = 1.25
@@ -509,6 +510,10 @@ function ActiveWorkout() {
   const update = useStore(s => s.update)
   const { startRest: liveRest, stopRest, stopWork, work } = useUI()
   const A = S.active
+  const activeDbData = useLiveQuery(
+    () => (A?.id ? queryActiveWorkout(db, A.id) : null),
+    [A?.id]
+  )
   // A past workout has no rest to time — the sets were done days ago. The work timer for
   // timed sets stays, since counting a hold is how its duration gets entered.
   const startRest = A.backfill ? () => {} : liveRest
@@ -847,6 +852,22 @@ function ActiveWorkout() {
         }
       }
     }, true)
+    if (A?.id) {
+      const activeEntry = A.entries[idx]
+      const currentSet = activeEntry?.sets?.[i]
+      if (currentSet) {
+        checkSet(db, {
+          workoutId: A.id,
+          setId: currentSet.id || (idx * 100 + i + 1),
+          done: checked,
+          w: typeof currentSet.w === 'number' && Number.isFinite(currentSet.w) && currentSet.w >= 0 ? currentSet.w : undefined,
+          r: typeof currentSet.r === 'number' && Number.isInteger(currentSet.r) && currentSet.r >= 0 ? currentSet.r : undefined,
+          rir: typeof currentSet.rir === 'number' && currentSet.rir >= 0 && currentSet.rir <= 6 ? currentSet.rir : undefined,
+          rpe: typeof currentSet.rpe === 'number' && currentSet.rpe >= 6 && currentSet.rpe <= 10 ? currentSet.rpe : undefined,
+          who: useStore.getState().user?.name || 'athlete'
+        }).catch(() => {})
+      }
+    }
     if (workoutDone) workoutCompleteSheet()
     else if (exJustDone && cardioEntry) useUI.getState().toast(t('Cardio logged'))
     else if (exJustDone && m === 'time') useUI.getState().toast(t('Hold logged'))

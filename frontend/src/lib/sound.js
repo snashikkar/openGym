@@ -23,6 +23,16 @@ let audioCtx = null
 let idleTm = null
 let idleAt = 0
 
+export function _resetAudioContext() {
+  if (audioCtx) {
+    try { audioCtx.state = 'closed' } catch (e) {}
+  }
+  audioCtx = null
+  clearTimeout(idleTm)
+  idleTm = null
+  idleAt = 0
+}
+
 const ctxFor = () => {
   if (!audioCtx || audioCtx.state === 'closed') audioCtx = new (window.AudioContext || window.webkitAudioContext)()
   return audioCtx

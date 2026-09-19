@@ -38,14 +38,21 @@ const settle = () => new Promise(r => setTimeout(r, 0))
 const background = async () => { globalThis.document.visibilityState = 'hidden'; if (live) await live.release(); fire(); await settle() }
 const foreground = async () => { globalThis.document.visibilityState = 'visible'; fire(); await settle() }
 
-let requestWakeLock, releaseWakeLock, wakeLockSupported
+let requestWakeLock, releaseWakeLock, wakeLockSupported, _resetWakeLock
+const origDoc = globalThis.document
+const origNav = globalThis.navigator
 
 beforeEach(async () => {
   fakeBrowser()
   vi.resetModules()   // the module holds process-wide state; each test gets a fresh one
-  ;({ requestWakeLock, releaseWakeLock, wakeLockSupported } = await import('./wakelock.js'))
+  ;({ requestWakeLock, releaseWakeLock, wakeLockSupported, _resetWakeLock } = await import('./wakelock.js'))
+  _resetWakeLock?.()
 })
-afterEach(() => { delete globalThis.document; delete globalThis.navigator })
+afterEach(() => {
+  _resetWakeLock?.()
+  globalThis.document = origDoc
+  setNavigator(origNav)
+})
 
 describe('wakeLockSupported', () => {
   it('is false when the browser has no wakeLock at all', () => {

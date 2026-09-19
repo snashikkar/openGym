@@ -33,12 +33,17 @@ describe('log a past workout', () => {
   afterEach(() => { act(() => { mounted.splice(0).forEach(root => root.unmount()) }) })
 
   it('refuses while a workout is running', () => {
+    const origToast = useUI.getState().toast
     const toast = vi.fn()
     useUI.setState({ toast })
     useStore.setState(s => ({ S: { ...s.S, active: { id: 'a', entries: [] } } }))
-    logPastWorkoutSheet()
-    expect(useUI.getState().sheets).toHaveLength(0)
-    expect(toast).toHaveBeenCalledWith('Finish the current workout first.')
+    try {
+      logPastWorkoutSheet()
+      expect(useUI.getState().sheets).toHaveLength(0)
+      expect(toast).toHaveBeenCalledWith('Finish the current workout first.')
+    } finally {
+      useUI.setState({ toast: origToast })
+    }
   })
 
   it('asks what to do when the day already has a workout', () => {

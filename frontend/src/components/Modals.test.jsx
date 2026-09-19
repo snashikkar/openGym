@@ -26,8 +26,7 @@ const mocks = vi.hoisted(() => {
   }
 })
 
-vi.mock('../store/useUI.js', async () => {
-  const React = await import('react')
+vi.mock('../store/useUI.js', () => {
   const useUI = (selector = state => state) => React.useSyncExternalStore(
     mocks.subscribe,
     () => selector(mocks.state),

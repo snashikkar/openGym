@@ -17,9 +17,10 @@ export {
 
 // Vite code-splits locale, instruction and exercise-name packs via import.meta.glob. They are
 // lazy, so the production bundle ships English only until another language is selected.
-const localePacks = import.meta.glob('../locales/*.js')
-const instrPacks = import.meta.glob('../instr/*.js')
-const exerciseNamePacks = import.meta.glob('../exercise-names/*.js')
+const hasGlob = typeof import.meta.glob === 'function'
+const localePacks = hasGlob ? import.meta.glob('../locales/*.js') : {}
+const instrPacks = hasGlob ? import.meta.glob('../instr/*.js') : {}
+const exerciseNamePacks = hasGlob ? import.meta.glob('../exercise-names/*.js') : {}
 
 // React subscription bookkeeping — kept here, not in core, so core has zero React coupling.
 const subs = new Set()

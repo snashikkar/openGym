@@ -47,10 +47,17 @@ vi.mock('../sheets.jsx', () => ({
 }))
 // The real module decides "supported" from navigator.audioSession, which each test sets up;
 // unlock is spied on so the Sounds switch can be checked for its tap-time side effect.
-vi.mock('../lib/sound.js', async importOriginal => {
-  const real = await importOriginal()
-  return { ...real, unlock: vi.fn() }
-})
+vi.mock('../lib/sound.js', () => ({
+  unlock: vi.fn(),
+  playOnSilentSupported: () => {
+    if (typeof navigator === 'undefined' || !navigator.audioSession) return false
+    const ua = navigator.userAgent || ''
+    return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)
+  },
+  beep: vi.fn(),
+  setPlayOnSilent: vi.fn(),
+  vibrate: vi.fn(),
+}))
 
 globalThis.__APP_VERSION__ ??= 'test'
 

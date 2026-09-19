@@ -47,6 +47,13 @@ export function releaseWakeLock() {
   if (s) s.release().catch(() => {})
 }
 
+export function _resetWakeLock() {
+  releaseWakeLock()
+  sentinel = null
+  wanted = false
+  pending = false
+}
+
 // Holds the lock for as long as `enabled` stays true.
 export function useWakeLock(enabled) {
   useEffect(() => {

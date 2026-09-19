@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "test": "bun test",
-    "test:all": "bun test && bun run --filter gym-api test && bun run --filter opengym-mcp test",
+    "test:all": "bun test && bun run --filter opengym-frontend test && bun run --filter gym-api test && bun run --filter opengym-mcp test",
     "build": "bun run --filter opengym-frontend build",
     "dev": "bun run --filter opengym-frontend dev",
     "start:api": "bun run --filter gym-api start"

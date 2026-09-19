@@ -10,6 +10,7 @@ import { mergeStates, localExtras } from '../lib/sync-merge.js'
 import { loadRemote, chooseLocal, forgetRemote, connect } from '../lib/remote.js'
 import { loadCoachDevice, saveCoachDevice, coachDeviceSettings } from '../lib/coach-device.js'
 import { migrateLocalStorage } from './migration.js'
+import { db, syncActiveWorkoutToDexie } from '../db/index.js'
 
 import { WC_DEFAULT } from '../lib/workout-controls.js'
 
@@ -146,6 +147,9 @@ export const useStore = create((set, get) => {
     localStorage.setItem(KEY, JSON.stringify(S))
     set({ S })
     if (MOBILE) nativePersist()
+    if (S.active?.id) {
+      syncActiveWorkoutToDexie(db, S.active, { who: get().user?.name || 'athlete' }).catch(() => {})
+    }
     if (push && get().user) {
       // Before boot has pulled, the copy in hand may be older than the server's: a push now
       // would carry it with a stale (or no) baseRev. It waits for finishBoot.

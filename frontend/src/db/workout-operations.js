@@ -209,3 +209,68 @@ export async function queryActiveWorkout(db = defaultDb, activeWorkoutId) {
     readOpCount
   };
 }
+
+/**
+ * 5. Sync active workout session and its entries/sets into Dexie.
+ * Fulfills continuous persistence and bitemporal audit trail requirements.
+ */
+export async function syncActiveWorkoutToDexie(db = defaultDb, active, { who = 'athlete' } = {}) {
+  if (!active || !active.id) return null;
+  return await db.transaction('rw', [db.workouts, db.workoutEntries, db.sets, db.auditLog], async () => {
+    await db.workouts.put({
+      id: active.id,
+      d: active.d || new Date().toISOString().slice(0, 10),
+      name: active.name || 'Workout',
+      start: active.start || Date.now(),
+      end: null,
+      vol: 0,
+      updatedAt: Date.now(),
+      _who: who
+    });
+
+    let globalOrder = 0;
+    for (let eIdx = 0; eIdx < (active.entries || []).length; eIdx++) {
+      const entry = active.entries[eIdx];
+      const entryId = entry.entryId || (eIdx + 1);
+      entry.entryId = entryId;
+
+      await db.workoutEntries.put({
+        id: entryId,
+        workoutId: active.id,
+        exerciseId: entry.id,
+        order: eIdx
+      });
+
+      for (let sIdx = 0; sIdx < (entry.sets || []).length; sIdx++) {
+        const s = entry.sets[sIdx];
+        const setId = s.id || (globalOrder + 1);
+        s.id = setId;
+
+        const setRecord = {
+          id: setId,
+          workoutId: active.id,
+          entryId,
+          exerciseId: entry.id,
+          order: globalOrder,
+          done: Boolean(s.done),
+          phase: s.phase || (s.warmup ? 'warmup' : 'work'),
+          type: s.type || 'straight',
+          _who: who
+        };
+        if (typeof s.w === 'number' && Number.isFinite(s.w) && s.w >= 0) {
+          setRecord.w = s.w;
+        }
+        if (typeof s.r === 'number' && Number.isInteger(s.r) && s.r >= 0) {
+          setRecord.r = s.r;
+        }
+        if (s.rir !== undefined && s.rir !== null) setRecord.rir = s.rir;
+        if (s.rpe !== undefined && s.rpe !== null) setRecord.rpe = s.rpe;
+
+        await db.sets.put(setRecord);
+        globalOrder++;
+      }
+    }
+
+    return active;
+  });
+}
